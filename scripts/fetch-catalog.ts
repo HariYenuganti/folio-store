@@ -144,13 +144,13 @@ async function main() {
       : list;
   };
 
-  // Collections are real price tiers (even thirds of the catalog), so Core /
-  // Atelier / Workshop actually group products by positioning.
+  // Collections are real price tiers (even thirds of the catalog), so
+  // Everyday / Elevated / Signature actually group products by positioning.
   const sortedPrices = raw.map(finalPrice).sort((a, b) => a - b);
   const tier1 = sortedPrices[Math.floor(sortedPrices.length / 3)];
   const tier2 = sortedPrices[Math.floor((2 * sortedPrices.length) / 3)];
   const collectionFor = (cents: number) =>
-    cents < tier1 ? "Core" : cents < tier2 ? "Atelier" : "Workshop";
+    cents < tier1 ? "Everyday" : cents < tier2 ? "Elevated" : "Signature";
 
   const products = raw
     .sort((a, b) => a.id - b.id)

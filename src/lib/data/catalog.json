@@ -13,7 +13,7 @@
     "price": 2539,
     "compareAtPrice": 2999,
     "category": "shirts",
-    "collection": "Core",
+    "collection": "Everyday",
     "sizes": [
       "XS",
       "S",
@@ -82,7 +82,7 @@
     ],
     "price": 2499,
     "category": "shirts",
-    "collection": "Core",
+    "collection": "Everyday",
     "sizes": [
       "XS",
       "S",
@@ -148,7 +148,7 @@
     "price": 2817,
     "compareAtPrice": 3499,
     "category": "shirts",
-    "collection": "Core",
+    "collection": "Everyday",
     "sizes": [
       "XS",
       "S",
@@ -213,7 +213,7 @@
     ],
     "price": 1999,
     "category": "shirts",
-    "collection": "Core",
+    "collection": "Everyday",
     "sizes": [
       "XS",
       "S",
@@ -279,7 +279,7 @@
     "price": 2480,
     "compareAtPrice": 2799,
     "category": "shirts",
-    "collection": "Core",
+    "collection": "Everyday",
     "sizes": [
       "XS",
       "S",
@@ -344,7 +344,7 @@
     ],
     "price": 14999,
     "category": "shoes",
-    "collection": "Workshop",
+    "collection": "Signature",
     "sizes": [
       "S",
       "M",
@@ -412,7 +412,7 @@
     "price": 6556,
     "compareAtPrice": 7999,
     "category": "shoes",
-    "collection": "Atelier",
+    "collection": "Elevated",
     "sizes": [
       "S",
       "M",
@@ -475,7 +475,7 @@
     ],
     "price": 8999,
     "category": "shoes",
-    "collection": "Atelier",
+    "collection": "Elevated",
     "sizes": [
       "S",
       "M",
@@ -538,7 +538,7 @@
     ],
     "price": 11999,
     "category": "shoes",
-    "collection": "Workshop",
+    "collection": "Signature",
     "sizes": [
       "S",
       "M",
@@ -605,7 +605,7 @@
     ],
     "price": 10999,
     "category": "shoes",
-    "collection": "Workshop",
+    "collection": "Signature",
     "sizes": [
       "S",
       "M",
@@ -672,7 +672,7 @@
     ],
     "price": 8999,
     "category": "watches",
-    "collection": "Atelier",
+    "collection": "Elevated",
     "sizes": [
       "M"
     ],
@@ -733,7 +733,7 @@
     "price": 124139,
     "compareAtPrice": 149999,
     "category": "watches",
-    "collection": "Workshop",
+    "collection": "Signature",
     "sizes": [
       "M"
     ],
@@ -794,7 +794,7 @@
     "price": 820079,
     "compareAtPrice": 899999,
     "category": "watches",
-    "collection": "Workshop",
+    "collection": "Signature",
     "sizes": [
       "M"
     ],
@@ -855,7 +855,7 @@
     "price": 1072239,
     "compareAtPrice": 1299999,
     "category": "watches",
-    "collection": "Workshop",
+    "collection": "Signature",
     "sizes": [
       "M"
     ],
@@ -915,7 +915,7 @@
     ],
     "price": 1099999,
     "category": "watches",
-    "collection": "Workshop",
+    "collection": "Signature",
     "sizes": [
       "M"
     ],
@@ -975,7 +975,7 @@
     ],
     "price": 1399999,
     "category": "watches",
-    "collection": "Workshop",
+    "collection": "Signature",
     "sizes": [
       "M"
     ],
@@ -1035,7 +1035,7 @@
     ],
     "price": 2999,
     "category": "accessories",
-    "collection": "Atelier",
+    "collection": "Elevated",
     "sizes": [
       "M"
     ],
@@ -1095,7 +1095,7 @@
     ],
     "price": 2499,
     "category": "accessories",
-    "collection": "Core",
+    "collection": "Everyday",
     "sizes": [
       "M"
     ],
@@ -1155,7 +1155,7 @@
     ],
     "price": 3499,
     "category": "accessories",
-    "collection": "Atelier",
+    "collection": "Elevated",
     "sizes": [
       "M"
     ],
@@ -1220,7 +1220,7 @@
     "price": 1775,
     "compareAtPrice": 1999,
     "category": "accessories",
-    "collection": "Core",
+    "collection": "Everyday",
     "sizes": [
       "M"
     ],
@@ -1280,7 +1280,7 @@
     ],
     "price": 2299,
     "category": "accessories",
-    "collection": "Core",
+    "collection": "Everyday",
     "sizes": [
       "M"
     ],
@@ -1341,7 +1341,7 @@
     "price": 2635,
     "compareAtPrice": 2999,
     "category": "tops",
-    "collection": "Core",
+    "collection": "Everyday",
     "sizes": [
       "XS",
       "S",
@@ -1407,7 +1407,7 @@
     "price": 1615,
     "compareAtPrice": 1999,
     "category": "tops",
-    "collection": "Core",
+    "collection": "Everyday",
     "sizes": [
       "XS",
       "S",
@@ -1473,7 +1473,7 @@
     "price": 2999,
     "compareAtPrice": 3499,
     "category": "tops",
-    "collection": "Atelier",
+    "collection": "Elevated",
     "sizes": [
       "XS",
       "S",
@@ -1539,7 +1539,7 @@
     "price": 2163,
     "compareAtPrice": 2499,
     "category": "tops",
-    "collection": "Core",
+    "collection": "Everyday",
     "sizes": [
       "XS",
       "S",
@@ -1605,7 +1605,7 @@
     "price": 3481,
     "compareAtPrice": 3999,
     "category": "tops",
-    "collection": "Atelier",
+    "collection": "Elevated",
     "sizes": [
       "XS",
       "S",
@@ -1671,7 +1671,7 @@
     "price": 4105,
     "compareAtPrice": 4999,
     "category": "bags",
-    "collection": "Atelier",
+    "collection": "Elevated",
     "sizes": [
       "M"
     ],
@@ -1731,7 +1731,7 @@
     ],
     "price": 12999,
     "category": "bags",
-    "collection": "Workshop",
+    "collection": "Signature",
     "sizes": [
       "M"
     ],
@@ -1792,7 +1792,7 @@
     "price": 51545,
     "compareAtPrice": 59999,
     "category": "bags",
-    "collection": "Workshop",
+    "collection": "Signature",
     "sizes": [
       "M"
     ],
@@ -1853,7 +1853,7 @@
     "price": 3391,
     "compareAtPrice": 3999,
     "category": "bags",
-    "collection": "Atelier",
+    "collection": "Elevated",
     "sizes": [
       "M"
     ],
@@ -1914,7 +1914,7 @@
     "price": 5301,
     "compareAtPrice": 5999,
     "category": "bags",
-    "collection": "Atelier",
+    "collection": "Elevated",
     "sizes": [
       "M"
     ],
@@ -1975,7 +1975,7 @@
     "price": 11637,
     "compareAtPrice": 12999,
     "category": "dresses",
-    "collection": "Workshop",
+    "collection": "Signature",
     "sizes": [
       "XS",
       "S",
@@ -2041,7 +2041,7 @@
     "price": 7536,
     "compareAtPrice": 8999,
     "category": "dresses",
-    "collection": "Atelier",
+    "collection": "Elevated",
     "sizes": [
       "XS",
       "S",
@@ -2108,7 +2108,7 @@
     "price": 6794,
     "compareAtPrice": 7999,
     "category": "dresses",
-    "collection": "Atelier",
+    "collection": "Elevated",
     "sizes": [
       "XS",
       "S",
@@ -2175,7 +2175,7 @@
     "price": 4115,
     "compareAtPrice": 4999,
     "category": "dresses",
-    "collection": "Atelier",
+    "collection": "Elevated",
     "sizes": [
       "XS",
       "S",
@@ -2241,7 +2241,7 @@
     "price": 14576,
     "compareAtPrice": 17999,
     "category": "dresses",
-    "collection": "Workshop",
+    "collection": "Signature",
     "sizes": [
       "XS",
       "S",
@@ -2311,7 +2311,7 @@
     "price": 2542,
     "compareAtPrice": 2999,
     "category": "accessories",
-    "collection": "Core",
+    "collection": "Everyday",
     "sizes": [
       "M"
     ],
@@ -2372,7 +2372,7 @@
     "price": 2120,
     "compareAtPrice": 2499,
     "category": "accessories",
-    "collection": "Core",
+    "collection": "Everyday",
     "sizes": [
       "M"
     ],
@@ -2432,7 +2432,7 @@
     ],
     "price": 1999,
     "category": "accessories",
-    "collection": "Core",
+    "collection": "Everyday",
     "sizes": [
       "M"
     ],
@@ -2492,7 +2492,7 @@
     ],
     "price": 1999,
     "category": "shoes",
-    "collection": "Core",
+    "collection": "Everyday",
     "sizes": [
       "S",
       "M",
@@ -2559,7 +2559,7 @@
     ],
     "price": 7999,
     "category": "shoes",
-    "collection": "Atelier",
+    "collection": "Elevated",
     "sizes": [
       "S",
       "M",
@@ -2623,7 +2623,7 @@
     "price": 4303,
     "compareAtPrice": 4999,
     "category": "shoes",
-    "collection": "Atelier",
+    "collection": "Elevated",
     "sizes": [
       "S",
       "M",
@@ -2687,7 +2687,7 @@
     "price": 2575,
     "compareAtPrice": 2999,
     "category": "shoes",
-    "collection": "Core",
+    "collection": "Everyday",
     "sizes": [
       "S",
       "M",
@@ -2751,7 +2751,7 @@
     "price": 2880,
     "compareAtPrice": 3499,
     "category": "shoes",
-    "collection": "Atelier",
+    "collection": "Elevated",
     "sizes": [
       "S",
       "M",
@@ -2815,7 +2815,7 @@
     "price": 452749,
     "compareAtPrice": 499999,
     "category": "watches",
-    "collection": "Workshop",
+    "collection": "Signature",
     "sizes": [
       "M"
     ],
@@ -2875,7 +2875,7 @@
     ],
     "price": 1599999,
     "category": "watches",
-    "collection": "Workshop",
+    "collection": "Signature",
     "sizes": [
       "M"
     ],
@@ -2936,7 +2936,7 @@
     "price": 924659,
     "compareAtPrice": 1099999,
     "category": "watches",
-    "collection": "Workshop",
+    "collection": "Signature",
     "sizes": [
       "M"
     ],
@@ -2998,7 +2998,7 @@
     "price": 65327,
     "compareAtPrice": 79999,
     "category": "watches",
-    "collection": "Workshop",
+    "collection": "Signature",
     "sizes": [
       "M"
     ],
@@ -3059,7 +3059,7 @@
     "price": 11361,
     "compareAtPrice": 12999,
     "category": "watches",
-    "collection": "Workshop",
+    "collection": "Signature",
     "sizes": [
       "M"
     ],

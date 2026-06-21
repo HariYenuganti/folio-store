@@ -56,7 +56,7 @@ export default function HomePage() {
               variant="outline"
               className="rounded-none border-background text-background hover:bg-background hover:text-foreground"
             >
-              <Link href="/shop?collection=atelier">Discover Atelier</Link>
+              <Link href="/shop?collection=signature">Explore Signature</Link>
             </Button>
           </div>
         </div>
@@ -198,7 +198,7 @@ export default function HomePage() {
           <div className="relative aspect-[4/5] overflow-hidden">
             <Image
               src="https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?auto=format&fit=crop&w=1200&q=80"
-              alt="Workshop"
+              alt="FORM editorial"
               fill
               sizes="(min-width: 768px) 50vw, 100vw"
               className="object-cover"
