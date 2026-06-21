@@ -82,7 +82,7 @@
     ],
     "price": 2499,
     "category": "shirts",
-    "collection": "Atelier",
+    "collection": "Core",
     "sizes": [
       "XS",
       "S",
@@ -148,7 +148,7 @@
     "price": 2817,
     "compareAtPrice": 3499,
     "category": "shirts",
-    "collection": "Workshop",
+    "collection": "Core",
     "sizes": [
       "XS",
       "S",
@@ -279,7 +279,7 @@
     "price": 2480,
     "compareAtPrice": 2799,
     "category": "shirts",
-    "collection": "Atelier",
+    "collection": "Core",
     "sizes": [
       "XS",
       "S",
@@ -412,7 +412,7 @@
     "price": 6556,
     "compareAtPrice": 7999,
     "category": "shoes",
-    "collection": "Core",
+    "collection": "Atelier",
     "sizes": [
       "S",
       "M",
@@ -605,7 +605,7 @@
     ],
     "price": 10999,
     "category": "shoes",
-    "collection": "Core",
+    "collection": "Workshop",
     "sizes": [
       "S",
       "M",
@@ -794,7 +794,7 @@
     "price": 820079,
     "compareAtPrice": 899999,
     "category": "watches",
-    "collection": "Core",
+    "collection": "Workshop",
     "sizes": [
       "M"
     ],
@@ -855,7 +855,7 @@
     "price": 1072239,
     "compareAtPrice": 1299999,
     "category": "watches",
-    "collection": "Atelier",
+    "collection": "Workshop",
     "sizes": [
       "M"
     ],
@@ -975,7 +975,7 @@
     ],
     "price": 1399999,
     "category": "watches",
-    "collection": "Core",
+    "collection": "Workshop",
     "sizes": [
       "M"
     ],
@@ -1095,7 +1095,7 @@
     ],
     "price": 2499,
     "category": "accessories",
-    "collection": "Workshop",
+    "collection": "Core",
     "sizes": [
       "M"
     ],
@@ -1155,7 +1155,7 @@
     ],
     "price": 3499,
     "category": "accessories",
-    "collection": "Core",
+    "collection": "Atelier",
     "sizes": [
       "M"
     ],
@@ -1220,7 +1220,7 @@
     "price": 1775,
     "compareAtPrice": 1999,
     "category": "accessories",
-    "collection": "Atelier",
+    "collection": "Core",
     "sizes": [
       "M"
     ],
@@ -1280,7 +1280,7 @@
     ],
     "price": 2299,
     "category": "accessories",
-    "collection": "Workshop",
+    "collection": "Core",
     "sizes": [
       "M"
     ],
@@ -1407,7 +1407,7 @@
     "price": 1615,
     "compareAtPrice": 1999,
     "category": "tops",
-    "collection": "Atelier",
+    "collection": "Core",
     "sizes": [
       "XS",
       "S",
@@ -1473,7 +1473,7 @@
     "price": 2999,
     "compareAtPrice": 3499,
     "category": "tops",
-    "collection": "Workshop",
+    "collection": "Atelier",
     "sizes": [
       "XS",
       "S",
@@ -1671,7 +1671,7 @@
     "price": 4105,
     "compareAtPrice": 4999,
     "category": "bags",
-    "collection": "Workshop",
+    "collection": "Atelier",
     "sizes": [
       "M"
     ],
@@ -1731,7 +1731,7 @@
     ],
     "price": 12999,
     "category": "bags",
-    "collection": "Core",
+    "collection": "Workshop",
     "sizes": [
       "M"
     ],
@@ -1792,7 +1792,7 @@
     "price": 51545,
     "compareAtPrice": 59999,
     "category": "bags",
-    "collection": "Atelier",
+    "collection": "Workshop",
     "sizes": [
       "M"
     ],
@@ -1853,7 +1853,7 @@
     "price": 3391,
     "compareAtPrice": 3999,
     "category": "bags",
-    "collection": "Workshop",
+    "collection": "Atelier",
     "sizes": [
       "M"
     ],
@@ -1914,7 +1914,7 @@
     "price": 5301,
     "compareAtPrice": 5999,
     "category": "bags",
-    "collection": "Core",
+    "collection": "Atelier",
     "sizes": [
       "M"
     ],
@@ -1975,7 +1975,7 @@
     "price": 11637,
     "compareAtPrice": 12999,
     "category": "dresses",
-    "collection": "Atelier",
+    "collection": "Workshop",
     "sizes": [
       "XS",
       "S",
@@ -2041,7 +2041,7 @@
     "price": 7536,
     "compareAtPrice": 8999,
     "category": "dresses",
-    "collection": "Workshop",
+    "collection": "Atelier",
     "sizes": [
       "XS",
       "S",
@@ -2108,7 +2108,7 @@
     "price": 6794,
     "compareAtPrice": 7999,
     "category": "dresses",
-    "collection": "Core",
+    "collection": "Atelier",
     "sizes": [
       "XS",
       "S",
@@ -2372,7 +2372,7 @@
     "price": 2120,
     "compareAtPrice": 2499,
     "category": "accessories",
-    "collection": "Atelier",
+    "collection": "Core",
     "sizes": [
       "M"
     ],
@@ -2432,7 +2432,7 @@
     ],
     "price": 1999,
     "category": "accessories",
-    "collection": "Workshop",
+    "collection": "Core",
     "sizes": [
       "M"
     ],
@@ -2623,7 +2623,7 @@
     "price": 4303,
     "compareAtPrice": 4999,
     "category": "shoes",
-    "collection": "Workshop",
+    "collection": "Atelier",
     "sizes": [
       "S",
       "M",
@@ -2875,7 +2875,7 @@
     ],
     "price": 1599999,
     "category": "watches",
-    "collection": "Core",
+    "collection": "Workshop",
     "sizes": [
       "M"
     ],
@@ -2936,7 +2936,7 @@
     "price": 924659,
     "compareAtPrice": 1099999,
     "category": "watches",
-    "collection": "Atelier",
+    "collection": "Workshop",
     "sizes": [
       "M"
     ],
@@ -3059,7 +3059,7 @@
     "price": 11361,
     "compareAtPrice": 12999,
     "category": "watches",
-    "collection": "Core",
+    "collection": "Workshop",
     "sizes": [
       "M"
     ],

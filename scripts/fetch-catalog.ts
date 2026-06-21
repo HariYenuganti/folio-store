@@ -30,8 +30,6 @@ const CATEGORY_MAP: Record<string, string> = {
   "womens-jewellery": "accessories",
 };
 
-const COLLECTIONS = ["Core", "Atelier", "Workshop"] as const;
-
 /** Colour words we can pull straight out of a product title. */
 const COLOR_WORDS: Record<string, string> = {
   black: "#1a1a1a",
@@ -138,15 +136,29 @@ async function main() {
     .map((p) => p.rating)
     .sort((a, b) => b - a)[Math.min(7, raw.length - 1)];
 
+  // Final (post-discount) price in cents.
+  const finalPrice = (p: DummyProduct) => {
+    const list = Math.round(p.price * 100);
+    return p.discountPercentage >= 8
+      ? Math.round(p.price * (1 - p.discountPercentage / 100) * 100)
+      : list;
+  };
+
+  // Collections are real price tiers (even thirds of the catalog), so Core /
+  // Atelier / Workshop actually group products by positioning.
+  const sortedPrices = raw.map(finalPrice).sort((a, b) => a - b);
+  const tier1 = sortedPrices[Math.floor(sortedPrices.length / 3)];
+  const tier2 = sortedPrices[Math.floor((2 * sortedPrices.length) / 3)];
+  const collectionFor = (cents: number) =>
+    cents < tier1 ? "Core" : cents < tier2 ? "Atelier" : "Workshop";
+
   const products = raw
     .sort((a, b) => a.id - b.id)
     .map((p, i) => {
       const category = CATEGORY_MAP[p.category] ?? "accessories";
       const listCents = Math.round(p.price * 100);
       const onSale = p.discountPercentage >= 8;
-      const priceCents = onSale
-        ? Math.round(p.price * (1 - p.discountPercentage / 100) * 100)
-        : listCents;
+      const priceCents = finalPrice(p);
 
       const reviews = (p.reviews ?? []).slice(0, 3).map((r) => ({
         rating: r.rating,
@@ -169,7 +181,7 @@ async function main() {
         price: priceCents,
         ...(onSale ? { compareAtPrice: listCents } : {}),
         category,
-        collection: COLLECTIONS[i % COLLECTIONS.length],
+        collection: collectionFor(priceCents),
         sizes: sizesFor(category),
         colors: colorsFromTitle(p.title),
         images: p.images.slice(0, 4),

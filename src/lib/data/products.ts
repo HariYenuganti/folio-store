@@ -11,21 +11,23 @@ import catalog from "./catalog.json";
  */
 export const PRODUCTS: Product[] = catalog as unknown as Product[];
 
+// Collections are price tiers (assigned by the seed script): Core = everyday,
+// Atelier = elevated, Workshop = statement / investment pieces.
 export const COLLECTIONS = [
   {
     slug: "core",
     name: "Core",
-    tagline: "Everyday foundations. Quietly considered.",
+    tagline: "Everyday foundations — our most accessible pieces.",
   },
   {
     slug: "atelier",
     name: "Atelier",
-    tagline: "Elevated pieces, made in small runs.",
+    tagline: "Elevated essentials at a considered price.",
   },
   {
     slug: "workshop",
     name: "Workshop",
-    tagline: "Statement design. Built to last.",
+    tagline: "Statement design and investment buys.",
   },
 ] as const;
 
