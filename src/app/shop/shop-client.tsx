@@ -32,6 +32,7 @@ export function ShopClient({ products }: { products: Product[] }) {
   // already mounted (a soft navigation that wouldn't re-run useState).
   const category = params.get("category") ?? "all";
   const collection = params.get("collection") ?? "all";
+  const query = params.get("q")?.trim() ?? "";
 
   const [sizes, setSizes] = useState<Set<string>>(new Set());
   const [sort, setSort] = useState<Sort>("featured");
@@ -44,8 +45,9 @@ export function ShopClient({ products }: { products: Product[] }) {
 
   const activeCategory = CATEGORIES.find((c) => c.slug === category);
   const activeCollection = COLLECTIONS.find((c) => c.slug === collection);
-  const heading =
-    activeCategory?.name ?? activeCollection?.name ?? "All products";
+  const heading = query
+    ? `“${query}”`
+    : (activeCategory?.name ?? activeCollection?.name ?? "All products");
 
   // Catalog is served from /api/products via TanStack Query. The server-rendered
   // list is passed as initialData so the first paint has no loading flash, while
@@ -69,6 +71,16 @@ export function ShopClient({ products }: { products: Product[] }) {
       );
     if (sizes.size > 0)
       out = out.filter((p) => p.sizes.some((s) => sizes.has(s)));
+    if (query) {
+      const qq = query.toLowerCase();
+      out = out.filter(
+        (p) =>
+          p.name.toLowerCase().includes(qq) ||
+          p.brand?.toLowerCase().includes(qq) ||
+          p.category.toLowerCase().includes(qq) ||
+          p.tags.some((t) => t.toLowerCase().includes(qq))
+      );
+    }
     switch (sort) {
       case "price-asc":
         out.sort((a, b) => a.price - b.price);
@@ -85,7 +97,7 @@ export function ShopClient({ products }: { products: Product[] }) {
         out.sort((a, b) => Number(!!b.featured) - Number(!!a.featured));
     }
     return out;
-  }, [catalog, category, collection, sizes, sort]);
+  }, [catalog, category, collection, sizes, sort, query]);
 
   const updateUrl = (key: string, value: string) => {
     const u = new URLSearchParams(params.toString());

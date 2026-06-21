@@ -32,3 +32,9 @@ export function fetchProduct(slug: string) {
     `/api/products/${slug}`
   );
 }
+
+export function searchProducts(q: string) {
+  return getJson<{ products: Product[] }>(
+    `/api/products?q=${encodeURIComponent(q)}`
+  ).then((d) => d.products);
+}

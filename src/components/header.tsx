@@ -2,9 +2,10 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { Search, ShoppingBag, User, Menu } from "lucide-react";
+import { ShoppingBag, User, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { SearchDialog } from "@/components/search-dialog";
 import { useCart, cartCount } from "@/store/cart";
 import { CartDrawer } from "@/components/cart-drawer";
 import { cn } from "@/lib/utils";
@@ -76,17 +77,7 @@ export function Header() {
           </Link>
 
           <div className="flex flex-1 items-center justify-end gap-1">
-            <Button
-              asChild
-              variant="ghost"
-              size="icon"
-              aria-label="Search"
-              className="rounded-none"
-            >
-              <Link href="/shop">
-                <Search className="h-4 w-4" />
-              </Link>
-            </Button>
+            <SearchDialog />
             <ThemeToggle />
             <Button
               asChild

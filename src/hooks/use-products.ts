@@ -1,7 +1,12 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { fetchProduct, fetchProducts, type ProductsFilter } from "@/lib/api";
+import {
+  fetchProduct,
+  fetchProducts,
+  searchProducts,
+  type ProductsFilter,
+} from "@/lib/api";
 import { queryKeys } from "@/lib/query-keys";
 import type { Product } from "@/types";
 
@@ -25,5 +30,16 @@ export function useProduct(slug: string) {
     queryKey: queryKeys.product(slug),
     queryFn: () => fetchProduct(slug),
     enabled: Boolean(slug),
+  });
+}
+
+/** Product search. Disabled until the query is at least 2 characters. */
+export function useSearch(query: string) {
+  const q = query.trim();
+  return useQuery({
+    queryKey: queryKeys.search(q),
+    queryFn: () => searchProducts(q),
+    enabled: q.length >= 2,
+    staleTime: 30_000,
   });
 }

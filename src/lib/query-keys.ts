@@ -5,4 +5,5 @@ export const queryKeys = {
   products: (filter: ProductsFilter = {}) =>
     ["products", filter] as const,
   product: (slug: string) => ["product", slug] as const,
+  search: (q: string) => ["search", q] as const,
 };
