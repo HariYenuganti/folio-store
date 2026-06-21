@@ -38,7 +38,7 @@ export function Footer() {
       <div className="container py-16">
         <div className="grid gap-12 md:grid-cols-12">
           <div className="md:col-span-5">
-            <p className="wordmark text-xl">FORM</p>
+            <p className="wordmark text-xl">FOLIO</p>
             <p className="mt-4 max-w-sm text-sm text-muted-foreground">
               A tightly edited selection of the labels we love. Sign up for new
               arrivals, restocks, and first access to drops.
@@ -70,7 +70,7 @@ export function Footer() {
         </div>
 
         <div className="mt-16 flex flex-col items-start justify-between gap-2 border-t border-border pt-6 text-xs text-muted-foreground md:flex-row md:items-center">
-          <p>© {new Date().getFullYear()} FORM Studio. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} FOLIO Studio. All rights reserved.</p>
           <div className="flex gap-4">
             <Link href="/help#privacy">Privacy</Link>
             <Link href="/help#terms">Terms</Link>

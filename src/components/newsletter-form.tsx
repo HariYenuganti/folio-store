@@ -21,7 +21,7 @@ export function NewsletterForm() {
     setSubmitting(true);
     // Simulated subscribe — swap for a real endpoint when wiring a provider.
     setTimeout(() => {
-      toast.success("You're on the list. Welcome to FORM.");
+      toast.success("You're on the list. Welcome to FOLIO.");
       setEmail("");
       setSubmitting(false);
     }, 400);

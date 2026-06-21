@@ -50,7 +50,7 @@ const SECTIONS = [
     id: "terms",
     title: "Terms",
     body: [
-      "FORM is a demonstration storefront built as a personal project. Product data and imagery are sourced from public sample APIs for illustrative purposes.",
+      "FOLIO is a demonstration storefront built as a personal project. Product data and imagery are sourced from public sample APIs for illustrative purposes.",
       "No goods are actually sold or shipped.",
     ],
   },

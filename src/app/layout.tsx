@@ -25,13 +25,13 @@ const serif = Cormorant_Garamond({
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000"),
   title: {
-    default: "FORM · Considered essentials",
-    template: "%s · FORM",
+    default: "FOLIO · Considered essentials",
+    template: "%s · FOLIO",
   },
   description:
     "Considered essentials, made by craftspeople we trust. Minimalist clothing built to last.",
   openGraph: {
-    title: "FORM · Considered essentials",
+    title: "FOLIO · Considered essentials",
     description:
       "Considered essentials, made by craftspeople we trust. Minimalist clothing built to last.",
     type: "website",

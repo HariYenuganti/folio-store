@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 
 export const metadata = {
   title: "Our story",
-  description: "FORM is a tightly edited selection of the labels we love.",
+  description: "FOLIO is a tightly edited selection of the labels we love.",
 };
 
 const VALUES = [
@@ -32,7 +32,7 @@ export default function AboutPage() {
       <section className="relative h-[42vh] min-h-[320px] w-full overflow-hidden bg-muted">
         <Image
           src="https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?auto=format&fit=crop&w=2000&q=80"
-          alt="FORM editorial"
+          alt="FOLIO editorial"
           fill
           priority
           sizes="100vw"
@@ -41,7 +41,7 @@ export default function AboutPage() {
         <div className="absolute inset-0 bg-gradient-to-b from-black/20 to-black/50" />
         <div className="container relative z-10 flex h-full flex-col justify-end pb-12 text-background">
           <p className="text-xs uppercase tracking-[0.32em] opacity-80">
-            About FORM
+            About FOLIO
           </p>
           <h1 className="mt-3 max-w-2xl font-serif text-4xl leading-tight md:text-6xl">
             The labels worth keeping.
@@ -52,12 +52,12 @@ export default function AboutPage() {
       {/* Intro */}
       <section className="container max-w-3xl py-16">
         <p className="text-pretty font-serif text-2xl leading-snug md:text-3xl">
-          FORM is a tightly edited fashion store: a single place for the
+          FOLIO is a tightly edited fashion store: a single place for the
           shirts, dresses, footwear, watches and accessories we&apos;d actually
           wear, from labels we trust.
         </p>
         <p className="mt-6 text-sm leading-relaxed text-muted-foreground">
-          We started FORM because shopping had become noise: endless tabs,
+          We started FOLIO because shopping had become noise: endless tabs,
           thousands of near-identical products, no point of view. Our answer is
           restraint. We choose a small number of pieces, photograph them
           honestly, and tell you exactly what you&apos;re getting: the real

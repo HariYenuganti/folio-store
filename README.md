@@ -1,4 +1,4 @@
-# FORM — Modern e-commerce in Next.js 15
+# FOLIO — Modern e-commerce in Next.js 15
 
 A polished, production-leaning e-commerce storefront for a minimalist apparel
 brand. Built as a portfolio piece to showcase a modern full-stack React
@@ -40,8 +40,8 @@ to flip the same storefront onto a real backend with no code changes.
 ## Quick start
 
 ```bash
-git clone <this-repo> form-store
-cd form-store
+git clone <this-repo> folio-store
+cd folio-store
 npm install --legacy-peer-deps
 npm run dev
 ```

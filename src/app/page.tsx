@@ -22,7 +22,7 @@ export default function HomePage() {
       <section className="relative h-[78vh] min-h-[560px] w-full overflow-hidden bg-muted">
         <Image
           src="https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&w=2000&q=80"
-          alt="FORM Autumn/Winter editorial"
+          alt="FOLIO Autumn/Winter editorial"
           fill
           priority
           sizes="100vw"
@@ -198,7 +198,7 @@ export default function HomePage() {
           <div className="relative aspect-[4/5] overflow-hidden">
             <Image
               src="https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?auto=format&fit=crop&w=1200&q=80"
-              alt="FORM editorial"
+              alt="FOLIO editorial"
               fill
               sizes="(min-width: 768px) 50vw, 100vw"
               className="object-cover"

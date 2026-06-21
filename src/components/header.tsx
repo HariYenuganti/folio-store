@@ -70,9 +70,9 @@ export function Header() {
           <Link
             href="/"
             className="wordmark text-lg md:text-xl"
-            aria-label="FORM home"
+            aria-label="FOLIO home"
           >
-            FORM
+            FOLIO
           </Link>
 
           <div className="flex flex-1 items-center justify-end gap-1">
