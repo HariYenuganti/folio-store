@@ -25,10 +25,10 @@ to flip the same storefront onto a real backend with no code changes.
 
 ## What's inside
 
-- **200+ product catalog** — Curated hero pieces plus a deterministically generated catalog across 5 categories and 3 collections
+- **Real product catalog** — Seeded from the public DummyJSON API by a normalisation script (`npm run catalog`) and baked to JSON so it runs offline. Real titles, descriptions, prices, discounts, ratings, reviews, stock, and photography across 7 categories
 - **Editorial home** — Hero, featured products, collections lookbook, manifesto
 - **Shop / PLP** — Category + collection + size filters, sort, URL-synced state
-- **PDP** — Image gallery, color swatches, size picker, accordion details, related products
+- **PDP** — Image gallery, color swatches, size picker, star ratings, real customer reviews, stock status, accordion details, related products
 - **Cart** — Slide-out drawer + dedicated cart page, persisted to localStorage
 - **Checkout** — Stripe Checkout session (with mock fallback for demos)
 - **Auth** — Supabase email/password sign-in & sign-up (with demo fallback)

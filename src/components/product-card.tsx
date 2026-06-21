@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Star } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { ProductImage } from "@/components/product-image";
 import { formatPrice } from "@/lib/utils";
@@ -58,15 +59,24 @@ export function ProductCard({ product }: { product: Product }) {
         </div>
       </div>
 
-      <div className="mt-2 flex gap-1.5">
-        {product.colors.slice(0, 4).map((c) => (
-          <span
-            key={c.name}
-            className="h-3 w-3 rounded-full border border-border"
-            style={{ backgroundColor: c.hex }}
-            title={c.name}
-          />
-        ))}
+      <div className="mt-2 flex items-center justify-between gap-2">
+        <div className="flex gap-1.5">
+          {product.colors.slice(0, 4).map((c) => (
+            <span
+              key={c.name}
+              className="h-3 w-3 rounded-full border border-border"
+              style={{ backgroundColor: c.hex }}
+              title={c.name}
+            />
+          ))}
+        </div>
+        {product.rating != null && (
+          <div className="flex items-center gap-1 text-xs text-muted-foreground">
+            <Star className="h-3 w-3 fill-foreground text-foreground" />
+            <span className="text-foreground">{product.rating.toFixed(1)}</span>
+            {product.reviewCount ? <span>({product.reviewCount})</span> : null}
+          </div>
+        )}
       </div>
     </Link>
   );

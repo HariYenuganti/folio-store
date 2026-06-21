@@ -3,7 +3,15 @@
 import { useState } from "react";
 import { ProductImage } from "@/components/product-image";
 import { toast } from "sonner";
-import { Minus, Plus, ShoppingBag, Truck, RotateCcw, ShieldCheck } from "lucide-react";
+import {
+  Minus,
+  Plus,
+  ShoppingBag,
+  Truck,
+  RotateCcw,
+  ShieldCheck,
+  Star,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Accordion,
@@ -107,6 +115,55 @@ export function ProductDetail({ product }: { product: Product }) {
             </span>
           )}
         </div>
+
+        {/* Rating + meta */}
+        {(product.rating != null || product.brand || product.stock != null) && (
+          <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs">
+            {product.rating != null && (
+              <div className="flex items-center gap-1.5">
+                <div className="flex">
+                  {Array.from({ length: 5 }).map((_, i) => (
+                    <Star
+                      key={i}
+                      className={cn(
+                        "h-3.5 w-3.5",
+                        i < Math.round(product.rating!)
+                          ? "fill-foreground text-foreground"
+                          : "text-muted-foreground/40"
+                      )}
+                    />
+                  ))}
+                </div>
+                <span className="tabular-nums">{product.rating.toFixed(1)}</span>
+                {product.reviewCount ? (
+                  <span className="text-muted-foreground">
+                    ({product.reviewCount} reviews)
+                  </span>
+                ) : null}
+              </div>
+            )}
+            {product.brand && (
+              <span className="text-muted-foreground">
+                by <span className="text-foreground">{product.brand}</span>
+              </span>
+            )}
+            {product.stock != null && (
+              <span
+                className={cn(
+                  product.stock > 10
+                    ? "text-muted-foreground"
+                    : "font-medium text-destructive"
+                )}
+              >
+                {product.stock > 10
+                  ? "In stock"
+                  : product.stock > 0
+                    ? `Only ${product.stock} left`
+                    : "Out of stock"}
+              </span>
+            )}
+          </div>
+        )}
 
         <p className="mt-6 text-pretty text-sm leading-relaxed text-muted-foreground">
           {product.description}
@@ -228,6 +285,42 @@ export function ProductDetail({ product }: { product: Product }) {
               </ul>
             </AccordionContent>
           </AccordionItem>
+          {product.reviews && product.reviews.length > 0 && (
+            <AccordionItem value="reviews">
+              <AccordionTrigger>
+                Reviews ({product.reviews.length})
+              </AccordionTrigger>
+              <AccordionContent>
+                <ul className="space-y-4">
+                  {product.reviews.map((r, i) => (
+                    <li key={i} className="border-b border-border pb-4 last:border-0 last:pb-0">
+                      <div className="flex items-center gap-2">
+                        <div className="flex">
+                          {Array.from({ length: 5 }).map((_, j) => (
+                            <Star
+                              key={j}
+                              className={cn(
+                                "h-3 w-3",
+                                j < r.rating
+                                  ? "fill-foreground text-foreground"
+                                  : "text-muted-foreground/40"
+                              )}
+                            />
+                          ))}
+                        </div>
+                        <span className="text-xs font-medium">
+                          {r.reviewerName}
+                        </span>
+                      </div>
+                      <p className="mt-2 text-sm text-muted-foreground">
+                        {r.comment}
+                      </p>
+                    </li>
+                  ))}
+                </ul>
+              </AccordionContent>
+            </AccordionItem>
+          )}
           <AccordionItem value="shipping">
             <AccordionTrigger>Shipping & returns</AccordionTrigger>
             <AccordionContent>

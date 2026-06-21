@@ -1,15 +1,24 @@
 export type Size = "XS" | "S" | "M" | "L" | "XL" | "XXL";
 
 export type Category =
+  | "shirts"
   | "tops"
-  | "bottoms"
-  | "outerwear"
-  | "knitwear"
+  | "dresses"
+  | "shoes"
+  | "bags"
+  | "watches"
   | "accessories";
 
 export interface ColorOption {
   name: string;
   hex: string;
+}
+
+export interface Review {
+  rating: number;
+  comment: string;
+  reviewerName: string;
+  date: string;
 }
 
 export interface Product {
@@ -31,6 +40,12 @@ export interface Product {
   inStock: boolean;
   featured?: boolean;
   newArrival?: boolean;
+  /** Enriched fields sourced from the real product feed. */
+  rating?: number;
+  reviewCount?: number;
+  reviews?: Review[];
+  brand?: string | null;
+  stock?: number;
 }
 
 export interface CartItem {

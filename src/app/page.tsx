@@ -36,8 +36,8 @@ export default function HomePage() {
             Worn forever.
           </h1>
           <p className="mt-5 max-w-md text-sm leading-relaxed opacity-90">
-            A new chapter of considered essentials — heavyweight wool, garment-dyed
-            cotton, hand-finished knits. Made in workshops we trust.
+            A new chapter of considered essentials — shirts, dresses, footwear and
+            accessories, chosen for how they wear and last.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Button
@@ -169,9 +169,9 @@ export default function HomePage() {
               Fewer pieces. Better made. Quietly considered.
             </h2>
             <p className="mt-5 max-w-md text-sm leading-relaxed opacity-80">
-              We work in small runs with mills and workshops we know by name —
-              from Donegal knits to Italian wool gabardine. Every piece is
-              designed to wear in, repair, and stay in your wardrobe.
+              We curate in small runs from makers we trust — across shirting,
+              dresses, footwear and accessories. Every piece is chosen to wear
+              in, repair, and stay in your wardrobe.
             </p>
             <Button
               asChild
