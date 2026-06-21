@@ -71,7 +71,10 @@ export function AccountClient() {
             Track shipments and view past orders.
           </p>
         </Link>
-        <Link href="#" className="border border-border p-6 hover:bg-accent">
+        <Link
+          href="/wishlist"
+          className="border border-border p-6 hover:bg-accent"
+        >
           <p className="text-xs uppercase tracking-widest text-muted-foreground">
             Saved
           </p>

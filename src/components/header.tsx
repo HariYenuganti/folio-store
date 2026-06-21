@@ -6,6 +6,7 @@ import { ShoppingBag, User, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { SearchDialog } from "@/components/search-dialog";
+import { WishlistNav } from "@/components/wishlist-nav";
 import { useCart, cartCount } from "@/store/cart";
 import { CartDrawer } from "@/components/cart-drawer";
 import { cn } from "@/lib/utils";
@@ -79,6 +80,7 @@ export function Header() {
           <div className="flex flex-1 items-center justify-end gap-1">
             <SearchDialog />
             <ThemeToggle />
+            <WishlistNav />
             <Button
               asChild
               variant="ghost"

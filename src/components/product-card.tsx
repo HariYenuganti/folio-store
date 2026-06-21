@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Star } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { ProductImage } from "@/components/product-image";
+import { WishlistButton } from "@/components/wishlist-button";
 import { formatPrice } from "@/lib/utils";
 import type { Product } from "@/types";
 
@@ -31,6 +32,10 @@ export function ProductCard({ product }: { product: Product }) {
           {product.newArrival && <Badge variant="outline">New</Badge>}
           {onSale && <Badge variant="sale">Sale</Badge>}
         </div>
+        <WishlistButton
+          slug={product.slug}
+          className="absolute right-3 top-3 opacity-0 transition-opacity group-hover:opacity-100 focus-visible:opacity-100 max-md:opacity-100"
+        />
       </div>
 
       <div className="mt-4 flex items-start justify-between gap-4">

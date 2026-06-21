@@ -13,6 +13,7 @@ import {
   Star,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { WishlistButton } from "@/components/wishlist-button";
 import {
   Accordion,
   AccordionContent,
@@ -247,6 +248,10 @@ export function ProductDetail({ product }: { product: Product }) {
             <ShoppingBag className="h-4 w-4" />
             Add to bag · {formatPrice(product.price * quantity)}
           </Button>
+          <WishlistButton
+            slug={product.slug}
+            className="h-12 w-12 border border-border bg-transparent hover:bg-accent"
+          />
         </div>
 
         {/* Trust row */}
