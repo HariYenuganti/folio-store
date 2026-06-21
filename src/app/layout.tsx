@@ -44,7 +44,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" suppressHydrationWarning className={`${sans.variable} ${serif.variable}`}>
+    <html
+      lang="en"
+      suppressHydrationWarning
+      data-scroll-behavior="smooth"
+      className={`${sans.variable} ${serif.variable}`}
+    >
       <body className="min-h-dvh font-sans">
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
           <QueryProvider>

@@ -10,8 +10,8 @@ import {
 } from "@/lib/data/products";
 
 export default function HomePage() {
-  const featured = getFeaturedProducts();
-  const newArrivals = getNewArrivals();
+  const featured = getFeaturedProducts().slice(0, 8);
+  const newArrivals = getNewArrivals().slice(0, 8);
 
   return (
     <>

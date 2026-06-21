@@ -27,13 +27,19 @@ export function ShopClient({ products }: { products: Product[] }) {
   const router = useRouter();
   const pathname = usePathname();
 
-  const initialCategory = params.get("category") ?? "all";
-  const initialCollection = params.get("collection") ?? "all";
+  // The URL is the single source of truth for category & collection, so header
+  // links and back/forward navigation stay in sync even when ShopClient is
+  // already mounted (a soft navigation that wouldn't re-run useState).
+  const category = params.get("category") ?? "all";
+  const collection = params.get("collection") ?? "all";
 
-  const [category, setCategory] = useState(initialCategory);
-  const [collection, setCollection] = useState(initialCollection);
   const [sizes, setSizes] = useState<Set<string>>(new Set());
   const [sort, setSort] = useState<Sort>("featured");
+
+  const activeCategory = CATEGORIES.find((c) => c.slug === category);
+  const activeCollection = COLLECTIONS.find((c) => c.slug === collection);
+  const heading =
+    activeCategory?.name ?? activeCollection?.name ?? "All products";
 
   // Catalog is served from /api/products via TanStack Query. The server-rendered
   // list is passed as initialData so the first paint has no loading flash, while
@@ -83,8 +89,6 @@ export function ShopClient({ products }: { products: Product[] }) {
   };
 
   const reset = () => {
-    setCategory("all");
-    setCollection("all");
     setSizes(new Set());
     setSort("featured");
     router.replace(pathname, { scroll: false });
@@ -96,9 +100,7 @@ export function ShopClient({ products }: { products: Product[] }) {
         <p className="text-xs uppercase tracking-widest text-muted-foreground">
           Shop
         </p>
-        <h1 className="mt-2 font-serif text-4xl md:text-5xl">
-          All products
-        </h1>
+        <h1 className="mt-2 font-serif text-4xl md:text-5xl">{heading}</h1>
         <p className="mt-3 text-sm text-muted-foreground">
           Considered pieces, organised by category and collection.
         </p>
@@ -114,10 +116,7 @@ export function ShopClient({ products }: { products: Product[] }) {
             <ul className="mt-3 space-y-2 text-sm">
               <li>
                 <button
-                  onClick={() => {
-                    setCategory("all");
-                    updateUrl("category", "all");
-                  }}
+                  onClick={() => updateUrl("category", "all")}
                   className={cn(
                     "transition-colors hover:text-foreground",
                     category === "all"
@@ -131,10 +130,7 @@ export function ShopClient({ products }: { products: Product[] }) {
               {CATEGORIES.map((c) => (
                 <li key={c.slug}>
                   <button
-                    onClick={() => {
-                      setCategory(c.slug);
-                      updateUrl("category", c.slug);
-                    }}
+                    onClick={() => updateUrl("category", c.slug)}
                     className={cn(
                       "transition-colors hover:text-foreground",
                       category === c.slug
@@ -158,10 +154,7 @@ export function ShopClient({ products }: { products: Product[] }) {
             <ul className="mt-3 space-y-2 text-sm">
               <li>
                 <button
-                  onClick={() => {
-                    setCollection("all");
-                    updateUrl("collection", "all");
-                  }}
+                  onClick={() => updateUrl("collection", "all")}
                   className={cn(
                     "transition-colors hover:text-foreground",
                     collection === "all"
@@ -175,10 +168,7 @@ export function ShopClient({ products }: { products: Product[] }) {
               {COLLECTIONS.map((c) => (
                 <li key={c.slug}>
                   <button
-                    onClick={() => {
-                      setCollection(c.slug);
-                      updateUrl("collection", c.slug);
-                    }}
+                    onClick={() => updateUrl("collection", c.slug)}
                     className={cn(
                       "transition-colors hover:text-foreground",
                       collection === c.slug
