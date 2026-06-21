@@ -2,6 +2,8 @@
 
 import { useMemo, useState } from "react";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
+import { Loader2 } from "lucide-react";
+import { useProducts } from "@/hooks/use-products";
 import { ProductGrid } from "@/components/product-grid";
 import { Button } from "@/components/ui/button";
 import {
@@ -33,6 +35,11 @@ export function ShopClient({ products }: { products: Product[] }) {
   const [sizes, setSizes] = useState<Set<string>>(new Set());
   const [sort, setSort] = useState<Sort>("featured");
 
+  // Catalog is served from /api/products via TanStack Query. The server-rendered
+  // list is passed as initialData so the first paint has no loading flash, while
+  // subsequent navigation/refetches are cached by React Query.
+  const { data: catalog = products, isFetching } = useProducts({}, products);
+
   const toggleSize = (s: string) => {
     setSizes((prev) => {
       const next = new Set(prev);
@@ -42,7 +49,7 @@ export function ShopClient({ products }: { products: Product[] }) {
   };
 
   const filtered = useMemo(() => {
-    let out = [...products];
+    let out = [...catalog];
     if (category !== "all") out = out.filter((p) => p.category === category);
     if (collection !== "all")
       out = out.filter(
@@ -66,7 +73,7 @@ export function ShopClient({ products }: { products: Product[] }) {
         out.sort((a, b) => Number(!!b.featured) - Number(!!a.featured));
     }
     return out;
-  }, [products, category, collection, sizes, sort]);
+  }, [catalog, category, collection, sizes, sort]);
 
   const updateUrl = (key: string, value: string) => {
     const u = new URLSearchParams(params.toString());
@@ -222,8 +229,11 @@ export function ShopClient({ products }: { products: Product[] }) {
         {/* Grid */}
         <div>
           <div className="mb-8 flex items-center justify-between gap-4">
-            <p className="text-sm text-muted-foreground">
+            <p className="flex items-center gap-2 text-sm text-muted-foreground">
               {filtered.length} {filtered.length === 1 ? "piece" : "pieces"}
+              {isFetching && (
+                <Loader2 className="h-3 w-3 animate-spin" aria-label="Updating" />
+              )}
             </p>
             <Select value={sort} onValueChange={(v) => setSort(v as Sort)}>
               <SelectTrigger className="w-[180px] rounded-none">

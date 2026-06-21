@@ -7,6 +7,7 @@ import "./globals.css";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { ThemeProvider } from "@/components/theme-provider";
+import { QueryProvider } from "@/components/query-provider";
 
 const sans = Inter({
   subsets: ["latin"],
@@ -46,10 +47,12 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning className={`${sans.variable} ${serif.variable}`}>
       <body className="min-h-dvh font-sans">
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
-          <Header />
-          <main>{children}</main>
-          <Footer />
-          <Toaster position="bottom-right" />
+          <QueryProvider>
+            <Header />
+            <main>{children}</main>
+            <Footer />
+            <Toaster position="bottom-right" />
+          </QueryProvider>
         </ThemeProvider>
       </body>
     </html>

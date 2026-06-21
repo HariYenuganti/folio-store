@@ -18,6 +18,7 @@ to flip the same storefront onto a real backend with no code changes.
 | Database     | **Drizzle ORM** over Postgres (Supabase or any Postgres)                 |
 | Auth         | **Supabase Auth** (email/password) via `@supabase/ssr`                   |
 | Payments     | **Stripe Checkout** + webhook handler                                    |
+| Data fetching| **TanStack Query (React Query) v5** — cached client fetching + SSR hydration |
 | State        | Zustand (cart, persisted to localStorage)                                |
 | Validation   | Zod                                                                      |
 | UX           | next-themes (light/dark), Sonner (toasts), Lucide icons, Framer Motion   |
@@ -120,6 +121,12 @@ src/
   drawer, and is cleared on a successful checkout.
 - **Routing.** Shop filters live in the URL (`?category=`, `?collection=`),
   so links and back/forward navigation work as expected.
+- **Data fetching.** The catalog is exposed at `/api/products` and consumed
+  on the client with TanStack Query. Server Components pass their rendered
+  list as `initialData`, so the first paint is instant (no spinner) while
+  React Query owns caching, background refetching, and the devtools panel.
+  See `src/components/query-provider.tsx`, `src/hooks/use-products.ts`,
+  and `src/lib/api.ts`.
 
 ## Scripts
 
