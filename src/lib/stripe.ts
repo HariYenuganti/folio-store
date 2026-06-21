@@ -1,14 +1,15 @@
 import Stripe from "stripe";
+import { appUrl, env, isStripeConfigured } from "@/lib/env";
 
-export const isStripeEnabled = Boolean(process.env.STRIPE_SECRET_KEY);
+export const isStripeEnabled = isStripeConfigured;
 
 export const stripe = isStripeEnabled
-  ? new Stripe(process.env.STRIPE_SECRET_KEY!, {
+  ? new Stripe(env.STRIPE_SECRET_KEY!, {
       apiVersion: "2025-09-30.clover" as Stripe.LatestApiVersion,
       typescript: true,
     })
   : null;
 
 export function getAppUrl() {
-  return process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
+  return appUrl;
 }

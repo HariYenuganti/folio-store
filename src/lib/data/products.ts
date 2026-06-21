@@ -1,5 +1,6 @@
 import type { Product } from "@/types";
 import catalog from "./catalog.json";
+import { catalogSchema } from "./schema";
 
 /**
  * Product catalog.
@@ -8,8 +9,11 @@ import catalog from "./catalog.json";
  * and baked into `catalog.json`, so the app runs fully offline. Run
  * `npm run catalog` to refresh it. The shape matches the Drizzle schema, so
  * swapping in the real DB requires no consumer-side changes.
+ *
+ * The JSON is validated against `catalogSchema` at load time, so malformed
+ * data throws here rather than failing silently downstream.
  */
-export const PRODUCTS: Product[] = catalog as unknown as Product[];
+export const PRODUCTS: Product[] = catalogSchema.parse(catalog);
 
 // Collections are price tiers (assigned by the seed script): Everyday,
 // Elevated, and Signature (statement / investment pieces).
