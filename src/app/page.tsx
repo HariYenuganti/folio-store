@@ -31,16 +31,16 @@ export default function HomePage() {
         <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/40" />
         <div className="container relative z-10 flex h-full flex-col justify-end pb-16 text-background">
           <p className="text-xs uppercase tracking-[0.32em] opacity-80">
-            The edit — Autumn / Winter
+            A curated fashion edit
           </p>
           <h1 className="mt-3 max-w-2xl font-serif text-5xl leading-[1.05] sm:text-6xl md:text-7xl">
-            Chosen well.
+            The best of
             <br />
-            Worn forever.
+            the brands you love.
           </h1>
           <p className="mt-5 max-w-md text-sm leading-relaxed opacity-90">
-            A tightly edited selection of the labels we love — shirts, dresses,
-            footwear, watches and accessories, chosen for how they wear and last.
+            One considered place for shirts, dresses, footwear, watches and
+            accessories — chosen, not crowded.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Button
