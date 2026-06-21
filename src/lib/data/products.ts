@@ -63,6 +63,19 @@ export function getNewArrivals(): Product[] {
   return PRODUCTS.filter((p) => p.newArrival);
 }
 
+/** Min/max price (in cents) of the products in a collection — used to label
+ *  the price tiers in the UI. Returns null for an empty collection. */
+export function getCollectionPriceRange(
+  slug: string
+): { min: number; max: number } | null {
+  const items = PRODUCTS.filter(
+    (p) => p.collection.toLowerCase() === slug.toLowerCase()
+  );
+  if (!items.length) return null;
+  const prices = items.map((p) => p.price);
+  return { min: Math.min(...prices), max: Math.max(...prices) };
+}
+
 export function getRelatedProducts(productId: string, limit = 4): Product[] {
   const product = PRODUCTS.find((p) => p.id === productId);
   if (!product) return [];

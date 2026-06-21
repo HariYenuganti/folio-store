@@ -3,8 +3,10 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ProductGrid } from "@/components/product-grid";
+import { formatPrice } from "@/lib/utils";
 import {
   COLLECTIONS,
+  getCollectionPriceRange,
   getFeaturedProducts,
   getNewArrivals,
 } from "@/lib/data/products";
@@ -102,11 +104,13 @@ export default function HomePage() {
               Collections
             </p>
             <h2 className="mt-2 font-serif text-3xl md:text-4xl">
-              Three studies, one wardrobe.
+              From everyday to investment.
             </h2>
           </div>
           <div className="grid gap-6 md:grid-cols-3">
-            {COLLECTIONS.map((c, i) => (
+            {COLLECTIONS.map((c, i) => {
+              const range = getCollectionPriceRange(c.slug);
+              return (
               <Link
                 key={c.slug}
                 href={`/shop?collection=${c.slug}`}
@@ -130,7 +134,16 @@ export default function HomePage() {
                   <p className="text-xs uppercase tracking-[0.28em] opacity-80">
                     {String(i + 1).padStart(2, "0")}
                   </p>
-                  <h3 className="mt-2 font-serif text-3xl">{c.name}</h3>
+                  <div className="flex items-baseline justify-between gap-2">
+                    <h3 className="mt-2 font-serif text-3xl">{c.name}</h3>
+                    {range && (
+                      <span className="text-xs uppercase tracking-widest opacity-80">
+                        {range.min === range.max
+                          ? formatPrice(range.min)
+                          : `${formatPrice(range.min)} – ${formatPrice(range.max)}`}
+                      </span>
+                    )}
+                  </div>
                   <p className="mt-1 max-w-xs text-sm opacity-90">{c.tagline}</p>
                   <span className="mt-4 inline-flex items-center gap-2 text-xs uppercase tracking-widest underline-offset-4 group-hover:underline">
                     Shop {c.name}
@@ -138,7 +151,8 @@ export default function HomePage() {
                   </span>
                 </div>
               </Link>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>
