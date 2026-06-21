@@ -26,5 +26,17 @@ export function ProductImage({
     );
   }
 
-  return <Image {...props} alt={alt} onError={() => setFailed(true)} />;
+  // loremflickr redirects to staticflickr and can be slow through the Next
+  // image optimizer, so load those directly in the browser.
+  const isFlickr =
+    typeof props.src === "string" && props.src.includes("loremflickr.com");
+
+  return (
+    <Image
+      {...props}
+      alt={alt}
+      unoptimized={props.unoptimized ?? isFlickr}
+      onError={() => setFailed(true)}
+    />
+  );
 }

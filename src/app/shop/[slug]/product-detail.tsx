@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
+import { ProductImage } from "@/components/product-image";
 import { toast } from "sonner";
 import { Minus, Plus, ShoppingBag, Truck, RotateCcw, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -49,9 +49,10 @@ export function ProductDetail({ product }: { product: Product }) {
       {/* Gallery */}
       <div>
         <div className="relative aspect-[4/5] overflow-hidden bg-muted">
-          <Image
+          <ProductImage
             src={product.images[activeImage]}
             alt={product.name}
+            fallbackLabel={product.name}
             fill
             sizes="(min-width: 1024px) 50vw, 100vw"
             className="object-cover"
@@ -71,7 +72,7 @@ export function ProductDetail({ product }: { product: Product }) {
                     : "border-transparent opacity-70 hover:opacity-100"
                 )}
               >
-                <Image
+                <ProductImage
                   src={src}
                   alt=""
                   fill

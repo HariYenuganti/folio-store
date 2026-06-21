@@ -121,7 +121,7 @@ const CURATED: Product[] = [
     ],
     images: [
       "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=1200&q=80",
-      "https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=1200&q=80",
     ],
     tags: ["essentials"],
     inStock: true,
@@ -202,7 +202,7 @@ const CURATED: Product[] = [
     ],
     images: [
       "https://images.unsplash.com/photo-1576566588028-4147f3842f27?auto=format&fit=crop&w=1200&q=80",
-      "https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1618354691373-d851c5c3a990?auto=format&fit=crop&w=1200&q=80",
     ],
     tags: ["workshop"],
     inStock: true,
@@ -310,7 +310,7 @@ const CURATED: Product[] = [
       { name: "Slate", hex: "#5a6271" },
     ],
     images: [
-      "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1434389677669-e08b4cac3105?auto=format&fit=crop&w=1200&q=80",
     ],
     tags: ["new", "atelier"],
     inStock: true,
@@ -337,7 +337,7 @@ const CURATED: Product[] = [
       { name: "Chocolate", hex: "#4a3025" },
     ],
     images: [
-      "https://images.unsplash.com/photo-1542272604-787c3835535d?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?auto=format&fit=crop&w=1200&q=80",
     ],
     tags: ["atelier"],
     inStock: true,
@@ -412,48 +412,39 @@ const PALETTE: ColorOption[] = [
   { name: "Mustard", hex: "#c79a3b" },
 ];
 
-const img = (id: string, w = 1200) =>
-  `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${w}&q=80`;
+/**
+ * Deterministic, per-product image from loremflickr. Every product gets a
+ * UNIQUE fashion photo — the `lock` value seeds a stable image so the URL
+ * returns the same picture on every render (no hydration mismatch, no
+ * flicker). The product card falls back to a neutral tile if a URL ever
+ * fails, so the grid never shows a broken image.
+ */
+const flickr = (keywords: string, lock: number) =>
+  `https://loremflickr.com/600/800/${keywords}?lock=${lock}`;
 
-/** Verified, working Unsplash photo IDs grouped by category. The product card
- *  falls back to a neutral tile if any URL fails, so the grid never breaks. */
-const IMAGE_POOLS: Record<Category, string[]> = {
-  outerwear: [
-    "photo-1591047139829-d91aecb6caea",
-    "photo-1543076447-215ad9ba6923",
-    "photo-1525507119028-ed4c629a60a3",
-    "photo-1539109136881-3be0616acf4b",
-    "photo-1580657018950-c7f7d6a6d990",
-    "photo-1551028719-00167b16eac5",
-  ].map((id) => img(id)),
-  knitwear: [
-    "photo-1620799140408-edc6dcb6d633",
-    "photo-1583743814966-8936f5b7be1a",
-    "photo-1576566588028-4147f3842f27",
-    "photo-1434389677669-e08b4cac3105",
-    "photo-1591047139829-d91aecb6caea",
-  ].map((id) => img(id)),
-  bottoms: [
-    "photo-1473966968600-fa801b869a1a",
-    "photo-1624378439575-d8705ad7ae80",
-    "photo-1542272604-787c3835535d",
-    "photo-1582552938357-32b906df40cb",
-    "photo-1594633312681-425c7b97ccd1",
-  ].map((id) => img(id)),
-  tops: [
-    "photo-1521572163474-6864f9cf17ab",
-    "photo-1620799140188-3b2a02fd9a77",
-    "photo-1602810318383-e386cc2a3ccf",
-    "photo-1576566588028-4147f3842f27",
-    "photo-1583743814966-8936f5b7be1a",
-  ].map((id) => img(id)),
-  accessories: [
-    "photo-1576871337632-b9aef4c17ab9",
-    "photo-1591561954557-26941169b49e",
-    "photo-1473966968600-fa801b869a1a",
-    "photo-1556905055-8f358a7a47b2",
-  ].map((id) => img(id)),
+const CATEGORY_KEYWORDS: Record<Category, string> = {
+  tops: "shirt",
+  bottoms: "trousers",
+  outerwear: "coat",
+  knitwear: "sweater",
+  accessories: "fashion",
 };
+
+/** Map an accessory name to a relevant image keyword. */
+function accessoryKeyword(name: string): string {
+  const n = name.toLowerCase();
+  if (/(cap|hat|beanie)/.test(n)) return "hat";
+  if (/(tote|weekender|bag)/.test(n)) return "bag";
+  if (/(wallet|card)/.test(n)) return "wallet";
+  if (n.includes("scarf")) return "scarf";
+  if (n.includes("belt")) return "belt";
+  if (n.includes("sock")) return "socks";
+  if (n.includes("glove")) return "gloves";
+  if (n.includes("tie")) return "necktie";
+  if (n.includes("keyring")) return "keychain";
+  if (n.includes("pocket square")) return "handkerchief";
+  return "accessories";
+}
 
 const article = (word: string) =>
   /^[aeiou]/i.test(word.trim()) ? "An" : "A";
@@ -493,8 +484,7 @@ function pickColors(i: number): ColorOption[] {
 function buildProduct(
   category: Category,
   type: TypeDef,
-  material: MaterialDef,
-  pool: string[]
+  material: MaterialDef
 ): Product {
   const i = seq++;
   const name = `${material.name} ${type.name}`;
@@ -508,7 +498,8 @@ function buildProduct(
   const newArrival = i % 6 === 0;
   const featured = i % 9 === 0;
 
-  const images = [pool[i % pool.length], pool[(i + 2) % pool.length]];
+  const kw = CATEGORY_KEYWORDS[category];
+  const images = [flickr(kw, i + 1), flickr(kw, i + 7001)];
 
   const tags = [collection.toLowerCase()];
   if (newArrival) tags.push("new");
@@ -550,12 +541,11 @@ function buildCategory(
   materials: MaterialDef[],
   count: number
 ): Product[] {
-  const pool = IMAGE_POOLS[category];
   const out: Product[] = [];
   for (const material of materials) {
     for (const type of types) {
       if (out.length >= count) return out;
-      out.push(buildProduct(category, type, material, pool));
+      out.push(buildProduct(category, type, material));
     }
   }
   return out;
@@ -682,9 +672,9 @@ const ACCESSORY_DEFS: {
 ];
 
 function buildAccessories(): Product[] {
-  const pool = IMAGE_POOLS.accessories;
   return ACCESSORY_DEFS.map((def) => {
     const i = seq++;
+    const kw = accessoryKeyword(def.name);
     const collection = COLLECTION_CYCLE[i % COLLECTION_CYCLE.length];
     const price = roundTo(def.base + (i % 4) * 200, 100);
     const onSale = i % 7 === 0;
@@ -709,7 +699,7 @@ function buildAccessories(): Product[] {
       collection,
       sizes: def.sizes,
       colors: pickColors(i),
-      images: [pool[i % pool.length], pool[(i + 1) % pool.length]],
+      images: [flickr(kw, i + 1), flickr(kw, i + 7001)],
       tags,
       inStock: true,
     };

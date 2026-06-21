@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
+import { ProductImage } from "@/components/product-image";
 import { Minus, Plus, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -51,7 +51,7 @@ export function CartPageClient() {
                 href={`/shop/${item.slug}`}
                 className="relative aspect-[3/4] w-28 shrink-0 overflow-hidden bg-muted sm:w-32"
               >
-                <Image
+                <ProductImage
                   src={item.image}
                   alt={item.name}
                   fill

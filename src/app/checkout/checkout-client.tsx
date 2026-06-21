@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
+import { ProductImage } from "@/components/product-image";
 import { Lock } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -160,7 +160,7 @@ export function CheckoutClient() {
                 className="flex gap-3"
               >
                 <div className="relative aspect-[3/4] w-14 shrink-0 overflow-hidden bg-muted">
-                  <Image
+                  <ProductImage
                     src={item.image}
                     alt={item.name}
                     fill
