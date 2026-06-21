@@ -1,6 +1,5 @@
 import Link from "next/link";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { NewsletterForm } from "@/components/newsletter-form";
 
 const GROUPS = [
   {
@@ -44,16 +43,7 @@ export function Footer() {
               A tightly edited selection of the labels we love. Sign up for new
               arrivals, restocks, and first access to drops.
             </p>
-            <form className="mt-6 flex max-w-sm gap-2">
-              <Input
-                type="email"
-                placeholder="Your email"
-                className="flex-1 rounded-none"
-              />
-              <Button size="sm" className="rounded-none">
-                Subscribe
-              </Button>
-            </form>
+            <NewsletterForm />
           </div>
 
           <div className="grid grid-cols-3 gap-8 md:col-span-7">

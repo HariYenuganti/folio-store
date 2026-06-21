@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
-import { Loader2 } from "lucide-react";
+import { Loader2, SlidersHorizontal } from "lucide-react";
 import { useProducts } from "@/hooks/use-products";
 import { ProductGrid } from "@/components/product-grid";
 import { Button } from "@/components/ui/button";
@@ -35,6 +35,12 @@ export function ShopClient({ products }: { products: Product[] }) {
 
   const [sizes, setSizes] = useState<Set<string>>(new Set());
   const [sort, setSort] = useState<Sort>("featured");
+  const [filtersOpen, setFiltersOpen] = useState(false);
+
+  const activeFilterCount =
+    (category !== "all" ? 1 : 0) +
+    (collection !== "all" ? 1 : 0) +
+    sizes.size;
 
   const activeCategory = CATEGORIES.find((c) => c.slug === category);
   const activeCollection = COLLECTIONS.find((c) => c.slug === collection);
@@ -106,9 +112,32 @@ export function ShopClient({ products }: { products: Product[] }) {
         </p>
       </div>
 
+      {/* Mobile filter toggle */}
+      <button
+        onClick={() => setFiltersOpen((o) => !o)}
+        className="mb-6 flex w-full items-center justify-between border border-border px-4 py-3 text-xs uppercase tracking-widest lg:hidden"
+        aria-expanded={filtersOpen}
+      >
+        <span className="flex items-center gap-2">
+          <SlidersHorizontal className="h-4 w-4" />
+          Filters
+          {activeFilterCount > 0 && (
+            <span className="bg-foreground px-1.5 py-0.5 text-[10px] text-background">
+              {activeFilterCount}
+            </span>
+          )}
+        </span>
+        <span>{filtersOpen ? "Close" : "Show"}</span>
+      </button>
+
       <div className="grid gap-10 lg:grid-cols-[220px_1fr]">
         {/* Sidebar filters */}
-        <aside className="space-y-8">
+        <aside
+          className={cn(
+            "space-y-8 lg:block",
+            filtersOpen ? "block" : "hidden"
+          )}
+        >
           <div>
             <p className="text-xs uppercase tracking-widest text-muted-foreground">
               Category
