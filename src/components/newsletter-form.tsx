@@ -1,50 +1,68 @@
 "use client";
 
-import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
+const schema = z.object({
+  email: z.string().email("Enter a valid email address."),
+});
+
+type Values = z.infer<typeof schema>;
+
 /** Footer newsletter signup. Demo-only — validates and confirms with a toast,
  *  no request is sent. */
 export function NewsletterForm() {
-  const [email, setEmail] = useState("");
-  const [submitting, setSubmitting] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors, isSubmitting },
+  } = useForm<Values>({
+    resolver: zodResolver(schema),
+    defaultValues: { email: "" },
+  });
 
-  const onSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const valid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-    if (!valid) {
-      toast.error("Please enter a valid email address.");
-      return;
-    }
-    setSubmitting(true);
+  const onSubmit = handleSubmit(async () => {
     // Simulated subscribe — swap for a real endpoint when wiring a provider.
-    setTimeout(() => {
-      toast.success("You're on the list. Welcome to FOLIO.");
-      setEmail("");
-      setSubmitting(false);
-    }, 400);
-  };
+    await new Promise((r) => setTimeout(r, 400));
+    toast.success("You're on the list. Welcome to FOLIO.");
+    reset();
+  });
 
   return (
-    <form onSubmit={onSubmit} className="mt-6 flex max-w-sm gap-2">
-      <Input
-        type="email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        placeholder="Your email"
-        aria-label="Email address"
-        className="flex-1 rounded-none"
-      />
-      <Button
-        type="submit"
-        size="sm"
-        className="rounded-none"
-        disabled={submitting}
-      >
-        {submitting ? "…" : "Subscribe"}
-      </Button>
+    <form onSubmit={onSubmit} noValidate className="mt-6 max-w-sm">
+      <div className="flex gap-2">
+        <Input
+          type="email"
+          placeholder="Your email"
+          aria-label="Email address"
+          aria-invalid={!!errors.email}
+          aria-describedby={errors.email ? "newsletter-error" : undefined}
+          className="flex-1 rounded-none"
+          {...register("email")}
+        />
+        <Button
+          type="submit"
+          size="sm"
+          className="rounded-none"
+          disabled={isSubmitting}
+        >
+          {isSubmitting ? "…" : "Subscribe"}
+        </Button>
+      </div>
+      {errors.email && (
+        <p
+          id="newsletter-error"
+          role="alert"
+          className="mt-1.5 text-xs text-destructive"
+        >
+          {errors.email.message}
+        </p>
+      )}
     </form>
   );
 }

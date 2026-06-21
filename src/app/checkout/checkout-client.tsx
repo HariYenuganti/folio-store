@@ -1,22 +1,42 @@
 "use client";
 
-import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 import { ProductImage } from "@/components/product-image";
 import { Lock } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { FormField } from "@/components/ui/form-field";
 import { Separator } from "@/components/ui/separator";
 import { useCart, cartSubtotal } from "@/store/cart";
 import { formatPrice } from "@/lib/utils";
 
+const checkoutSchema = z.object({
+  email: z.string().email("Enter a valid email address."),
+  firstName: z.string().min(1, "Required"),
+  lastName: z.string().min(1, "Required"),
+  address: z.string().min(1, "Required"),
+  city: z.string().min(1, "Required"),
+  postal: z.string().min(1, "Required"),
+  country: z.string().min(1, "Required"),
+});
+
+type CheckoutValues = z.infer<typeof checkoutSchema>;
+
 export function CheckoutClient() {
   const router = useRouter();
   const { items, clear } = useCart();
-  const [submitting, setSubmitting] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<CheckoutValues>({
+    resolver: zodResolver(checkoutSchema),
+    defaultValues: { country: "United States" },
+  });
   const subtotal = cartSubtotal(items);
   const shipping = subtotal >= 20000 ? 0 : 1500;
   const total = subtotal + shipping;
@@ -33,22 +53,17 @@ export function CheckoutClient() {
     );
   }
 
-  async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    setSubmitting(true);
+  const onSubmit = handleSubmit(async (values) => {
     try {
       const res = await fetch("/api/checkout", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({
-          items,
-          email: new FormData(e.currentTarget).get("email"),
-        }),
+        body: JSON.stringify({ items, email: values.email }),
       });
       const data: { url?: string; mockOrderId?: string; error?: string } =
         await res.json();
       if (data.url) {
-        window.location.href = data.url;
+        window.location.assign(data.url);
         return;
       }
       if (data.mockOrderId) {
@@ -59,10 +74,8 @@ export function CheckoutClient() {
       toast.error(data.error ?? "Something went wrong");
     } catch {
       toast.error("Couldn't reach the server.");
-    } finally {
-      setSubmitting(false);
     }
-  }
+  });
 
   return (
     <div className="container py-12">
@@ -75,6 +88,7 @@ export function CheckoutClient() {
 
       <form
         onSubmit={onSubmit}
+        noValidate
         className="grid gap-12 lg:grid-cols-[1fr_400px]"
       >
         {/* Form */}
@@ -84,17 +98,15 @@ export function CheckoutClient() {
               Contact
             </h2>
             <div className="mt-4 grid gap-4">
-              <div>
-                <Label htmlFor="email">Email</Label>
-                <Input
-                  id="email"
-                  name="email"
-                  type="email"
-                  required
-                  placeholder="you@example.com"
-                  className="mt-2 rounded-none"
-                />
-              </div>
+              <FormField
+                id="email"
+                label="Email"
+                type="email"
+                autoComplete="email"
+                placeholder="you@example.com"
+                error={errors.email?.message}
+                {...register("email")}
+              />
             </div>
           </section>
 
@@ -103,61 +115,50 @@ export function CheckoutClient() {
               Shipping
             </h2>
             <div className="mt-4 grid gap-4 sm:grid-cols-2">
-              <div>
-                <Label htmlFor="firstName">First name</Label>
-                <Input
-                  id="firstName"
-                  name="firstName"
-                  required
-                  className="mt-2 rounded-none"
-                />
-              </div>
-              <div>
-                <Label htmlFor="lastName">Last name</Label>
-                <Input
-                  id="lastName"
-                  name="lastName"
-                  required
-                  className="mt-2 rounded-none"
-                />
-              </div>
-              <div className="sm:col-span-2">
-                <Label htmlFor="address">Address</Label>
-                <Input
-                  id="address"
-                  name="address"
-                  required
-                  className="mt-2 rounded-none"
-                />
-              </div>
-              <div>
-                <Label htmlFor="city">City</Label>
-                <Input
-                  id="city"
-                  name="city"
-                  required
-                  className="mt-2 rounded-none"
-                />
-              </div>
-              <div>
-                <Label htmlFor="postal">Postal code</Label>
-                <Input
-                  id="postal"
-                  name="postal"
-                  required
-                  className="mt-2 rounded-none"
-                />
-              </div>
-              <div className="sm:col-span-2">
-                <Label htmlFor="country">Country</Label>
-                <Input
-                  id="country"
-                  name="country"
-                  required
-                  defaultValue="United States"
-                  className="mt-2 rounded-none"
-                />
-              </div>
+              <FormField
+                id="firstName"
+                label="First name"
+                autoComplete="given-name"
+                error={errors.firstName?.message}
+                {...register("firstName")}
+              />
+              <FormField
+                id="lastName"
+                label="Last name"
+                autoComplete="family-name"
+                error={errors.lastName?.message}
+                {...register("lastName")}
+              />
+              <FormField
+                id="address"
+                label="Address"
+                autoComplete="street-address"
+                containerClassName="sm:col-span-2"
+                error={errors.address?.message}
+                {...register("address")}
+              />
+              <FormField
+                id="city"
+                label="City"
+                autoComplete="address-level2"
+                error={errors.city?.message}
+                {...register("city")}
+              />
+              <FormField
+                id="postal"
+                label="Postal code"
+                autoComplete="postal-code"
+                error={errors.postal?.message}
+                {...register("postal")}
+              />
+              <FormField
+                id="country"
+                label="Country"
+                autoComplete="country-name"
+                containerClassName="sm:col-span-2"
+                error={errors.country?.message}
+                {...register("country")}
+              />
             </div>
           </section>
 
@@ -165,10 +166,10 @@ export function CheckoutClient() {
             type="submit"
             size="lg"
             className="w-full rounded-none"
-            disabled={submitting}
+            disabled={isSubmitting}
           >
             <Lock className="h-4 w-4" />
-            {submitting ? "Redirecting…" : `Pay ${formatPrice(total)}`}
+            {isSubmitting ? "Redirecting…" : `Pay ${formatPrice(total)}`}
           </Button>
           <p className="text-center text-[10px] uppercase tracking-widest text-muted-foreground">
             Secure checkout · Powered by Stripe
