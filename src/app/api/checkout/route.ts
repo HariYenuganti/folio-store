@@ -51,7 +51,7 @@ export async function POST(req: Request) {
           currency: "usd",
           unit_amount: i.price,
           product_data: {
-            name: `${i.name} — ${i.color} · ${i.size}`,
+            name: `${i.name} · ${i.color} · ${i.size}`,
             images: [i.image],
             metadata: {
               productId: i.productId,

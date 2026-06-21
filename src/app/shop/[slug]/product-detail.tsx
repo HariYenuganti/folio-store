@@ -47,7 +47,7 @@ export function ProductDetail({ product }: { product: Product }) {
       color,
       quantity,
     });
-    toast.success(`Added to bag — ${product.name}`, {
+    toast.success(`Added to bag: ${product.name}`, {
       description: `${color} · ${size}`,
     });
   };
@@ -326,7 +326,7 @@ export function ProductDetail({ product }: { product: Product }) {
             <AccordionContent>
               <p>
                 Complimentary carbon-neutral shipping on orders over $200.
-                Returns accepted within 30 days of delivery — unworn, with
+                Returns accepted within 30 days of delivery, unworn and with
                 original tags.
               </p>
             </AccordionContent>

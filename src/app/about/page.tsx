@@ -11,7 +11,7 @@ const VALUES = [
   {
     id: "sourcing",
     title: "How we source",
-    body: "We don't make our own clothes — we curate. Every label in the shop is chosen by hand for its make, its materials, and how it holds up over time. If it wouldn't earn a place in our own wardrobe, it doesn't make the edit.",
+    body: "We don't make our own clothes. We curate. Every label in the shop is chosen by hand for its make, its materials, and how it holds up over time. If it wouldn't earn a place in our own wardrobe, it doesn't make the edit.",
   },
   {
     id: "sustainability",
@@ -21,7 +21,7 @@ const VALUES = [
   {
     id: "service",
     title: "Service",
-    body: "Free shipping over $200, free 30-day returns, and a team that actually answers. Every order is backed by our authenticity guarantee — what you see is exactly what arrives.",
+    body: "Free shipping over $200, free 30-day returns, and a team that actually answers. Every order is backed by our authenticity guarantee: what you see is exactly what arrives.",
   },
 ];
 
@@ -52,7 +52,7 @@ export default function AboutPage() {
       {/* Intro */}
       <section className="container max-w-3xl py-16">
         <p className="text-pretty font-serif text-2xl leading-snug md:text-3xl">
-          FORM is a tightly edited fashion store — a single place for the
+          FORM is a tightly edited fashion store: a single place for the
           shirts, dresses, footwear, watches and accessories we&apos;d actually
           wear, from labels we trust.
         </p>
@@ -60,7 +60,7 @@ export default function AboutPage() {
           We started FORM because shopping had become noise: endless tabs,
           thousands of near-identical products, no point of view. Our answer is
           restraint. We choose a small number of pieces, photograph them
-          honestly, and tell you exactly what you&apos;re getting — the real
+          honestly, and tell you exactly what you&apos;re getting: the real
           price, the real reviews, the real stock.
         </p>
       </section>

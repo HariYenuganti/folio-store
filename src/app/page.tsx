@@ -22,7 +22,7 @@ export default function HomePage() {
       <section className="relative h-[78vh] min-h-[560px] w-full overflow-hidden bg-muted">
         <Image
           src="https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&w=2000&q=80"
-          alt="FORM — Autumn/Winter editorial"
+          alt="FORM Autumn/Winter editorial"
           fill
           priority
           sizes="100vw"
@@ -40,7 +40,7 @@ export default function HomePage() {
           </h1>
           <p className="mt-5 max-w-md text-sm leading-relaxed opacity-90">
             One considered place for shirts, dresses, footwear, watches and
-            accessories — chosen, not crowded.
+            accessories. Chosen, not crowded.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Button
@@ -181,7 +181,7 @@ export default function HomePage() {
               Fewer labels. Better chosen. Quietly curated.
             </h2>
             <p className="mt-5 max-w-md text-sm leading-relaxed opacity-80">
-              We bring together a tight selection of the labels we love — across
+              We bring together a tight selection of the labels we love, across
               shirting, dresses, footwear, watches and accessories. Every piece
               earns its place: chosen for how it&apos;s made, how it wears, and
               how long it lasts.

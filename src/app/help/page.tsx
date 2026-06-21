@@ -18,7 +18,7 @@ const SECTIONS = [
     id: "returns",
     title: "Returns & exchanges",
     body: [
-      "Changed your mind? Return any unworn item with its original tags within 30 days for a full refund — returns are free.",
+      "Changed your mind? Return any unworn item with its original tags within 30 days for a full refund. Returns are free.",
       "To start a return, head to your account or contact us and we'll send a prepaid label.",
     ],
   },
@@ -27,7 +27,7 @@ const SECTIONS = [
     title: "Sizing",
     body: [
       "Each product page lists available sizes. Apparel follows standard XS–XL sizing; footwear is listed in S/M/L bands.",
-      "If you're between sizes or unsure, reach out — we're happy to advise before you buy.",
+      "If you're between sizes or unsure, reach out. We're happy to advise before you buy.",
     ],
   },
   {
@@ -43,7 +43,7 @@ const SECTIONS = [
     title: "Privacy",
     body: [
       "We collect only what we need to process your order and improve the store. We never sell your data.",
-      "This is a portfolio demo — no real payments are processed and no personal data is stored.",
+      "This is a portfolio demo, so no real payments are processed and no personal data is stored.",
     ],
   },
   {

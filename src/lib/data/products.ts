@@ -17,7 +17,7 @@ export const COLLECTIONS = [
   {
     slug: "everyday",
     name: "Everyday",
-    tagline: "Foundations — our most accessible pieces.",
+    tagline: "Foundations. Our most accessible pieces.",
   },
   {
     slug: "elevated",
