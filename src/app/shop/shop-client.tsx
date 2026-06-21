@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
-import { Loader2, SlidersHorizontal } from "lucide-react";
+import { Loader2, SlidersHorizontal, Check } from "lucide-react";
 import { useProducts } from "@/hooks/use-products";
 import { ProductGrid } from "@/components/product-grid";
 import { Button } from "@/components/ui/button";
@@ -20,7 +20,21 @@ import type { Product, Size } from "@/types";
 
 const SIZES: Size[] = ["XS", "S", "M", "L", "XL", "XXL"];
 
-type Sort = "featured" | "price-asc" | "price-desc" | "new";
+type Sort = "featured" | "price-asc" | "price-desc" | "new" | "rating";
+
+const PRICE_RANGES = [
+  { key: "all", label: "All prices", min: 0, max: Infinity },
+  { key: "under-50", label: "Under $50", min: 0, max: 5000 },
+  { key: "50-150", label: "$50 – $150", min: 5000, max: 15000 },
+  { key: "150-500", label: "$150 – $500", min: 15000, max: 50000 },
+  { key: "over-500", label: "$500 & up", min: 50000, max: Infinity },
+] as const;
+
+const RATINGS = [
+  { value: 4.5, label: "4.5★ & up" },
+  { value: 4, label: "4★ & up" },
+  { value: 3, label: "3★ & up" },
+] as const;
 
 export function ShopClient({ products }: { products: Product[] }) {
   const params = useSearchParams();
@@ -36,10 +50,18 @@ export function ShopClient({ products }: { products: Product[] }) {
 
   const [sizes, setSizes] = useState<Set<string>>(new Set());
   const [sort, setSort] = useState<Sort>("featured");
+  const [priceKey, setPriceKey] = useState<string>("all");
+  const [minRating, setMinRating] = useState(0);
+  const [inStockOnly, setInStockOnly] = useState(false);
   const [filtersOpen, setFiltersOpen] = useState(false);
 
   const activeFilterCount =
-    (category !== "all" ? 1 : 0) + (collection !== "all" ? 1 : 0) + sizes.size;
+    (category !== "all" ? 1 : 0) +
+    (collection !== "all" ? 1 : 0) +
+    sizes.size +
+    (priceKey !== "all" ? 1 : 0) +
+    (minRating > 0 ? 1 : 0) +
+    (inStockOnly ? 1 : 0);
 
   const activeCategory = CATEGORIES.find((c) => c.slug === category);
   const activeCollection = COLLECTIONS.find((c) => c.slug === collection);
@@ -69,6 +91,13 @@ export function ShopClient({ products }: { products: Product[] }) {
       );
     if (sizes.size > 0)
       out = out.filter((p) => p.sizes.some((s) => sizes.has(s)));
+    const priceRange = PRICE_RANGES.find((r) => r.key === priceKey);
+    if (priceRange && priceRange.key !== "all")
+      out = out.filter(
+        (p) => p.price >= priceRange.min && p.price < priceRange.max,
+      );
+    if (minRating > 0) out = out.filter((p) => (p.rating ?? 0) >= minRating);
+    if (inStockOnly) out = out.filter((p) => p.inStock);
     if (query) {
       const qq = query.toLowerCase();
       out = out.filter(
@@ -89,11 +118,24 @@ export function ShopClient({ products }: { products: Product[] }) {
       case "new":
         out.sort((a, b) => Number(!!b.newArrival) - Number(!!a.newArrival));
         break;
+      case "rating":
+        out.sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0));
+        break;
       default:
         out.sort((a, b) => Number(!!b.featured) - Number(!!a.featured));
     }
     return out;
-  }, [catalog, category, collection, sizes, sort, query]);
+  }, [
+    catalog,
+    category,
+    collection,
+    sizes,
+    sort,
+    query,
+    priceKey,
+    minRating,
+    inStockOnly,
+  ]);
 
   const updateUrl = (key: string, value: string) => {
     const u = new URLSearchParams(params.toString());
@@ -105,6 +147,9 @@ export function ShopClient({ products }: { products: Product[] }) {
   const reset = () => {
     setSizes(new Set());
     setSort("featured");
+    setPriceKey("all");
+    setMinRating(0);
+    setInStockOnly(false);
     router.replace(pathname, { scroll: false });
   };
 
@@ -241,7 +286,88 @@ export function ShopClient({ products }: { products: Product[] }) {
             </div>
           </div>
 
-          {(category !== "all" || collection !== "all" || sizes.size > 0) && (
+          <Separator />
+
+          <div>
+            <p className="text-xs uppercase tracking-widest text-muted-foreground">
+              Price
+            </p>
+            <ul className="mt-3 space-y-2 text-sm">
+              {PRICE_RANGES.map((r) => (
+                <li key={r.key}>
+                  <button
+                    onClick={() => setPriceKey(r.key)}
+                    className={cn(
+                      "transition-colors hover:text-foreground",
+                      priceKey === r.key
+                        ? "text-foreground underline underline-offset-4"
+                        : "text-muted-foreground",
+                    )}
+                  >
+                    {r.label}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <Separator />
+
+          <div>
+            <p className="text-xs uppercase tracking-widest text-muted-foreground">
+              Rating
+            </p>
+            <ul className="mt-3 space-y-2 text-sm">
+              <li>
+                <button
+                  onClick={() => setMinRating(0)}
+                  className={cn(
+                    "transition-colors hover:text-foreground",
+                    minRating === 0
+                      ? "text-foreground underline underline-offset-4"
+                      : "text-muted-foreground",
+                  )}
+                >
+                  Any rating
+                </button>
+              </li>
+              {RATINGS.map((r) => (
+                <li key={r.value}>
+                  <button
+                    onClick={() => setMinRating(r.value)}
+                    className={cn(
+                      "transition-colors hover:text-foreground",
+                      minRating === r.value
+                        ? "text-foreground underline underline-offset-4"
+                        : "text-muted-foreground",
+                    )}
+                  >
+                    {r.label}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <Separator />
+
+          <button
+            onClick={() => setInStockOnly((v) => !v)}
+            aria-pressed={inStockOnly}
+            className="flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
+          >
+            <span
+              className={cn(
+                "flex h-4 w-4 items-center justify-center border border-border",
+                inStockOnly && "bg-foreground text-background",
+              )}
+            >
+              {inStockOnly && <Check className="h-3 w-3" />}
+            </span>
+            In stock only
+          </button>
+
+          {activeFilterCount > 0 && (
             <Button variant="outline" size="sm" onClick={reset}>
               Clear filters
             </Button>
@@ -266,6 +392,7 @@ export function ShopClient({ products }: { products: Product[] }) {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="featured">Featured</SelectItem>
+                <SelectItem value="rating">Top rated</SelectItem>
                 <SelectItem value="new">Newest</SelectItem>
                 <SelectItem value="price-asc">Price · Low to high</SelectItem>
                 <SelectItem value="price-desc">Price · High to low</SelectItem>
