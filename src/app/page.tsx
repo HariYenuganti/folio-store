@@ -6,13 +6,14 @@ import { ProductGrid } from "@/components/product-grid";
 import { formatPrice } from "@/lib/utils";
 import {
   COLLECTIONS,
+  getCollectionCoverImage,
   getCollectionPriceRange,
-  getFeaturedProducts,
+  getEditPicks,
   getNewArrivals,
 } from "@/lib/data/products";
 
 export default function HomePage() {
-  const featured = getFeaturedProducts().slice(0, 8);
+  const featured = getEditPicks(8);
   const newArrivals = getNewArrivals().slice(0, 8);
 
   return (
@@ -21,7 +22,7 @@ export default function HomePage() {
       <section className="relative h-[78vh] min-h-[560px] w-full overflow-hidden bg-muted">
         <Image
           src="https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&w=2000&q=80"
-          alt="Editorial campaign — Atlas Wool Coat"
+          alt="FORM — Autumn/Winter editorial"
           fill
           priority
           sizes="100vw"
@@ -30,16 +31,16 @@ export default function HomePage() {
         <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/40" />
         <div className="container relative z-10 flex h-full flex-col justify-end pb-16 text-background">
           <p className="text-xs uppercase tracking-[0.32em] opacity-80">
-            Autumn / Winter — Volume 03
+            The edit — Autumn / Winter
           </p>
           <h1 className="mt-3 max-w-2xl font-serif text-5xl leading-[1.05] sm:text-6xl md:text-7xl">
-            Built quietly.
+            Chosen well.
             <br />
             Worn forever.
           </h1>
           <p className="mt-5 max-w-md text-sm leading-relaxed opacity-90">
-            A new chapter of considered essentials — shirts, dresses, footwear and
-            accessories, chosen for how they wear and last.
+            A tightly edited selection of the labels we love — shirts, dresses,
+            footwear, watches and accessories, chosen for how they wear and last.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Button
@@ -64,13 +65,13 @@ export default function HomePage() {
       {/* MARQUEE */}
       <section className="border-y border-border bg-secondary/40 py-3">
         <div className="container flex flex-wrap items-center justify-center gap-x-10 gap-y-1 text-[10px] uppercase tracking-[0.28em] text-muted-foreground">
-          <span>Free returns within 30 days</span>
+          <span>Free shipping over $200</span>
           <span className="hidden md:inline">·</span>
-          <span>Carbon-neutral shipping</span>
+          <span>Free 30-day returns</span>
           <span className="hidden md:inline">·</span>
-          <span>Made in small batches</span>
+          <span>100% authentic</span>
           <span className="hidden md:inline">·</span>
-          <span>Repair, don't replace</span>
+          <span>Secure checkout</span>
         </div>
       </section>
 
@@ -110,25 +111,22 @@ export default function HomePage() {
           <div className="grid gap-6 md:grid-cols-3">
             {COLLECTIONS.map((c, i) => {
               const range = getCollectionPriceRange(c.slug);
+              const cover = getCollectionCoverImage(c.slug);
               return (
               <Link
                 key={c.slug}
                 href={`/shop?collection=${c.slug}`}
                 className="group relative aspect-[4/5] overflow-hidden bg-muted"
               >
-                <Image
-                  src={
-                    [
-                      "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=1200&q=80",
-                      "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?auto=format&fit=crop&w=1200&q=80",
-                      "https://images.unsplash.com/photo-1542272604-787c3835535d?auto=format&fit=crop&w=1200&q=80",
-                    ][i]
-                  }
-                  alt={c.name}
-                  fill
-                  sizes="(min-width: 768px) 33vw, 100vw"
-                  className="object-cover transition-transform duration-700 group-hover:scale-[1.04]"
-                />
+                {cover && (
+                  <Image
+                    src={cover}
+                    alt={c.name}
+                    fill
+                    sizes="(min-width: 768px) 33vw, 100vw"
+                    className="object-cover transition-transform duration-700 group-hover:scale-[1.04]"
+                  />
+                )}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent" />
                 <div className="absolute inset-x-0 bottom-0 p-6 text-background">
                   <p className="text-xs uppercase tracking-[0.28em] opacity-80">
@@ -180,12 +178,13 @@ export default function HomePage() {
               The brief
             </p>
             <h2 className="mt-4 max-w-md font-serif text-3xl leading-tight md:text-4xl">
-              Fewer pieces. Better made. Quietly considered.
+              Fewer labels. Better chosen. Quietly curated.
             </h2>
             <p className="mt-5 max-w-md text-sm leading-relaxed opacity-80">
-              We curate in small runs from makers we trust — across shirting,
-              dresses, footwear and accessories. Every piece is chosen to wear
-              in, repair, and stay in your wardrobe.
+              We bring together a tight selection of the labels we love — across
+              shirting, dresses, footwear, watches and accessories. Every piece
+              earns its place: chosen for how it&apos;s made, how it wears, and
+              how long it lasts.
             </p>
             <Button
               asChild
@@ -193,7 +192,7 @@ export default function HomePage() {
               size="lg"
               className="mt-8 rounded-none border-background text-background hover:bg-background hover:text-foreground"
             >
-              <Link href="#">Read the studio notes</Link>
+              <Link href="/about">Read our story</Link>
             </Button>
           </div>
           <div className="relative aspect-[4/5] overflow-hidden">

@@ -59,6 +59,48 @@ export function getFeaturedProducts(): Product[] {
   return PRODUCTS.filter((p) => p.featured);
 }
 
+/**
+ * A diversified "edit" — the highest-rated product from each category first,
+ * then the next-best overall to fill the row. Keeps the home feature grid from
+ * being dominated by a single category (e.g. all sneakers).
+ */
+export function getEditPicks(limit = 8): Product[] {
+  const byRating = [...PRODUCTS].sort(
+    (a, b) => (b.rating ?? 0) - (a.rating ?? 0)
+  );
+  const picks: Product[] = [];
+  const chosen = new Set<string>();
+
+  // One per category, best-rated.
+  const seenCategory = new Set<string>();
+  for (const p of byRating) {
+    if (!seenCategory.has(p.category)) {
+      seenCategory.add(p.category);
+      picks.push(p);
+      chosen.add(p.id);
+    }
+  }
+  // Fill remaining slots with the next best overall.
+  for (const p of byRating) {
+    if (picks.length >= limit) break;
+    if (!chosen.has(p.id)) {
+      picks.push(p);
+      chosen.add(p.id);
+    }
+  }
+  return picks.slice(0, limit);
+}
+
+/** Representative cover image for a collection (its highest-rated product). */
+export function getCollectionCoverImage(slug: string): string | null {
+  const items = PRODUCTS.filter(
+    (p) => p.collection.toLowerCase() === slug.toLowerCase()
+  );
+  if (!items.length) return null;
+  const top = [...items].sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0))[0];
+  return top.images[0] ?? null;
+}
+
 export function getNewArrivals(): Product[] {
   return PRODUCTS.filter((p) => p.newArrival);
 }

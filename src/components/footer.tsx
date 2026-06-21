@@ -16,19 +16,19 @@ const GROUPS = [
   {
     title: "About",
     links: [
-      { href: "#", label: "Our story" },
-      { href: "#", label: "Materials" },
-      { href: "#", label: "Sustainability" },
-      { href: "#", label: "Journal" },
+      { href: "/about", label: "Our story" },
+      { href: "/about#sourcing", label: "How we source" },
+      { href: "/about#sustainability", label: "Sustainability" },
+      { href: "/account", label: "My account" },
     ],
   },
   {
     title: "Help",
     links: [
-      { href: "#", label: "Shipping" },
-      { href: "#", label: "Returns" },
-      { href: "#", label: "Sizing" },
-      { href: "#", label: "Contact" },
+      { href: "/help#shipping", label: "Shipping" },
+      { href: "/help#returns", label: "Returns" },
+      { href: "/help#sizing", label: "Sizing" },
+      { href: "/help#contact", label: "Contact" },
     ],
   },
 ];
@@ -41,8 +41,8 @@ export function Footer() {
           <div className="md:col-span-5">
             <p className="wordmark text-xl">FORM</p>
             <p className="mt-4 max-w-sm text-sm text-muted-foreground">
-              Considered essentials, made by craftspeople we trust. Sign up for
-              new arrivals, restocks, and dispatches from the studio.
+              A tightly edited selection of the labels we love. Sign up for new
+              arrivals, restocks, and first access to drops.
             </p>
             <form className="mt-6 flex max-w-sm gap-2">
               <Input
@@ -82,9 +82,9 @@ export function Footer() {
         <div className="mt-16 flex flex-col items-start justify-between gap-2 border-t border-border pt-6 text-xs text-muted-foreground md:flex-row md:items-center">
           <p>© {new Date().getFullYear()} FORM Studio. All rights reserved.</p>
           <div className="flex gap-4">
-            <Link href="#">Privacy</Link>
-            <Link href="#">Terms</Link>
-            <Link href="#">Accessibility</Link>
+            <Link href="/help#privacy">Privacy</Link>
+            <Link href="/help#terms">Terms</Link>
+            <Link href="/help#contact">Accessibility</Link>
           </div>
         </div>
       </div>
