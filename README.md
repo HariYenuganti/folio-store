@@ -129,6 +129,25 @@ src/
   See `src/components/query-provider.tsx`, `src/hooks/use-products.ts`,
   and `src/lib/api.ts`.
 
+## Testing & CI
+
+```bash
+npm run test        # Vitest unit tests (cart store, data layer, utils, schema)
+npm run test:e2e    # Playwright E2E (browse → add to cart → checkout, search)
+npm run lint        # ESLint (flat config, next/core-web-vitals)
+npm run typecheck   # tsc --noEmit
+npm run format:check# Prettier
+```
+
+- **GitHub Actions** ([`.github/workflows/ci.yml`](.github/workflows/ci.yml)) runs
+  format → lint → typecheck → unit tests → build, plus a separate Playwright
+  E2E job, on every push and PR.
+- **Pre-commit hook** (husky + lint-staged) runs ESLint and Prettier on staged
+  files so nothing unformatted lands.
+- **Typed, validated config:** environment variables and the product catalog are
+  parsed with **zod** at load time, so misconfiguration or bad data fails fast
+  with a readable error.
+
 ## Scripts
 
 ```bash
@@ -136,7 +155,11 @@ npm run dev         # Next.js dev server
 npm run build       # Production build
 npm run start       # Production server
 npm run typecheck   # tsc --noEmit
-npm run lint        # next lint
+npm run lint        # eslint .
+npm run test        # Vitest unit tests
+npm run test:e2e    # Playwright end-to-end tests
+npm run format      # Prettier write
+npm run catalog     # Re-seed catalog.json from the source API
 npm run db:push     # Drizzle: push schema to Postgres
 npm run db:seed     # Seed catalog into the DB
 ```

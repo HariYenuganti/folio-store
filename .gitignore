@@ -10,3 +10,6 @@ dist
 .turbo
 out
 coverage
+playwright-report
+test-results
+.vitest
