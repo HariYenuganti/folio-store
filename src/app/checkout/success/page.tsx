@@ -12,7 +12,8 @@ export default async function SuccessPage({
 }) {
   const sp = await searchParams;
   const orderId =
-    sp.order ?? (sp.session_id ? sp.session_id.slice(-12).toUpperCase() : "DEMO");
+    sp.order ??
+    (sp.session_id ? sp.session_id.slice(-12).toUpperCase() : "DEMO");
 
   return (
     <div className="container flex min-h-[70vh] flex-col items-center justify-center text-center">

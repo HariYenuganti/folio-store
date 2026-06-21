@@ -8,10 +8,7 @@ import type { Product } from "@/types";
 export function ProductCard({ product }: { product: Product }) {
   const onSale = !!product.compareAtPrice;
   return (
-    <Link
-      href={`/shop/${product.slug}`}
-      className="group flex flex-col"
-    >
+    <Link href={`/shop/${product.slug}`} className="group flex flex-col">
       <div className="relative aspect-[3/4] overflow-hidden bg-muted">
         <ProductImage
           src={product.images[0]}

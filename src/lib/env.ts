@@ -41,7 +41,7 @@ const parsed = schema.safeParse({
 if (!parsed.success) {
   console.error(
     "❌ Invalid environment variables:\n",
-    parsed.error.flatten().fieldErrors
+    parsed.error.flatten().fieldErrors,
   );
   throw new Error("Invalid environment variables — see the log above.");
 }
@@ -50,7 +50,7 @@ export const env = parsed.data;
 
 /** Feature flags derived from configured env. */
 export const isSupabaseConfigured = Boolean(
-  env.NEXT_PUBLIC_SUPABASE_URL && env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+  env.NEXT_PUBLIC_SUPABASE_URL && env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
 );
 export const isStripeConfigured = Boolean(env.STRIPE_SECRET_KEY);
 export const isDatabaseConfigured = Boolean(env.DATABASE_URL);

@@ -39,9 +39,7 @@ export function ShopClient({ products }: { products: Product[] }) {
   const [filtersOpen, setFiltersOpen] = useState(false);
 
   const activeFilterCount =
-    (category !== "all" ? 1 : 0) +
-    (collection !== "all" ? 1 : 0) +
-    sizes.size;
+    (category !== "all" ? 1 : 0) + (collection !== "all" ? 1 : 0) + sizes.size;
 
   const activeCategory = CATEGORIES.find((c) => c.slug === category);
   const activeCollection = COLLECTIONS.find((c) => c.slug === collection);
@@ -67,7 +65,7 @@ export function ShopClient({ products }: { products: Product[] }) {
     if (category !== "all") out = out.filter((p) => p.category === category);
     if (collection !== "all")
       out = out.filter(
-        (p) => p.collection.toLowerCase() === collection.toLowerCase()
+        (p) => p.collection.toLowerCase() === collection.toLowerCase(),
       );
     if (sizes.size > 0)
       out = out.filter((p) => p.sizes.some((s) => sizes.has(s)));
@@ -78,7 +76,7 @@ export function ShopClient({ products }: { products: Product[] }) {
           p.name.toLowerCase().includes(qq) ||
           p.brand?.toLowerCase().includes(qq) ||
           p.category.toLowerCase().includes(qq) ||
-          p.tags.some((t) => t.toLowerCase().includes(qq))
+          p.tags.some((t) => t.toLowerCase().includes(qq)),
       );
     }
     switch (sort) {
@@ -89,9 +87,7 @@ export function ShopClient({ products }: { products: Product[] }) {
         out.sort((a, b) => b.price - a.price);
         break;
       case "new":
-        out.sort(
-          (a, b) => Number(!!b.newArrival) - Number(!!a.newArrival)
-        );
+        out.sort((a, b) => Number(!!b.newArrival) - Number(!!a.newArrival));
         break;
       default:
         out.sort((a, b) => Number(!!b.featured) - Number(!!a.featured));
@@ -145,10 +141,7 @@ export function ShopClient({ products }: { products: Product[] }) {
       <div className="grid gap-10 lg:grid-cols-[220px_1fr]">
         {/* Sidebar filters */}
         <aside
-          className={cn(
-            "space-y-8 lg:block",
-            filtersOpen ? "block" : "hidden"
-          )}
+          className={cn("space-y-8 lg:block", filtersOpen ? "block" : "hidden")}
         >
           <div>
             <p className="text-xs uppercase tracking-widest text-muted-foreground">
@@ -162,7 +155,7 @@ export function ShopClient({ products }: { products: Product[] }) {
                     "transition-colors hover:text-foreground",
                     category === "all"
                       ? "text-foreground underline underline-offset-4"
-                      : "text-muted-foreground"
+                      : "text-muted-foreground",
                   )}
                 >
                   All
@@ -176,7 +169,7 @@ export function ShopClient({ products }: { products: Product[] }) {
                       "transition-colors hover:text-foreground",
                       category === c.slug
                         ? "text-foreground underline underline-offset-4"
-                        : "text-muted-foreground"
+                        : "text-muted-foreground",
                     )}
                   >
                     {c.name}
@@ -200,7 +193,7 @@ export function ShopClient({ products }: { products: Product[] }) {
                     "transition-colors hover:text-foreground",
                     collection === "all"
                       ? "text-foreground underline underline-offset-4"
-                      : "text-muted-foreground"
+                      : "text-muted-foreground",
                   )}
                 >
                   All
@@ -214,7 +207,7 @@ export function ShopClient({ products }: { products: Product[] }) {
                       "transition-colors hover:text-foreground",
                       collection === c.slug
                         ? "text-foreground underline underline-offset-4"
-                        : "text-muted-foreground"
+                        : "text-muted-foreground",
                     )}
                   >
                     {c.name}
@@ -239,7 +232,7 @@ export function ShopClient({ products }: { products: Product[] }) {
                     "border border-border py-2 text-xs uppercase tracking-widest transition-colors",
                     sizes.has(s)
                       ? "bg-foreground text-background"
-                      : "hover:bg-accent"
+                      : "hover:bg-accent",
                   )}
                 >
                   {s}
@@ -248,9 +241,7 @@ export function ShopClient({ products }: { products: Product[] }) {
             </div>
           </div>
 
-          {(category !== "all" ||
-            collection !== "all" ||
-            sizes.size > 0) && (
+          {(category !== "all" || collection !== "all" || sizes.size > 0) && (
             <Button variant="outline" size="sm" onClick={reset}>
               Clear filters
             </Button>
@@ -263,7 +254,10 @@ export function ShopClient({ products }: { products: Product[] }) {
             <p className="flex items-center gap-2 text-sm text-muted-foreground">
               {filtered.length} {filtered.length === 1 ? "piece" : "pieces"}
               {isFetching && (
-                <Loader2 className="h-3 w-3 animate-spin" aria-label="Updating" />
+                <Loader2
+                  className="h-3 w-3 animate-spin"
+                  aria-label="Updating"
+                />
               )}
             </p>
             <Select value={sort} onValueChange={(v) => setSort(v as Sort)}>

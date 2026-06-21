@@ -16,7 +16,7 @@ const Body = z.object({
         size: z.string(),
         color: z.string(),
         quantity: z.number().int().positive(),
-      })
+      }),
     )
     .min(1),
 });
@@ -27,10 +27,13 @@ export async function POST(req: Request) {
   if (!parsed.success) {
     return NextResponse.json(
       { error: "Invalid cart payload." },
-      { status: 400 }
+      { status: 400 },
     );
   }
-  const { email, items } = parsed.data as { email?: string | null; items: CartItem[] };
+  const { email, items } = parsed.data as {
+    email?: string | null;
+    items: CartItem[];
+  };
 
   // Mock mode — no Stripe configured. Return a fake order id so the UI can
   // redirect to the success page without hitting Stripe.

@@ -14,11 +14,12 @@ export async function POST(req: Request) {
   if (!secret) {
     return NextResponse.json(
       { error: "STRIPE_WEBHOOK_SECRET not set" },
-      { status: 400 }
+      { status: 400 },
     );
   }
   const sig = req.headers.get("stripe-signature");
-  if (!sig) return NextResponse.json({ error: "missing signature" }, { status: 400 });
+  if (!sig)
+    return NextResponse.json({ error: "missing signature" }, { status: 400 });
 
   let event: Stripe.Event;
   try {

@@ -10,18 +10,18 @@ to flip the same storefront onto a real backend with no code changes.
 
 ## Stack
 
-| Layer        | Tech                                                                     |
-| ------------ | ------------------------------------------------------------------------ |
-| Framework    | **Next.js 15** App Router, React 19, Server Components                   |
-| Language     | TypeScript 5, strict mode                                                |
-| Styling      | Tailwind CSS 3 + CSS variables, shadcn-style primitives, Radix UI        |
-| Database     | **Drizzle ORM** over Postgres (Supabase or any Postgres)                 |
-| Auth         | **Supabase Auth** (email/password) via `@supabase/ssr`                   |
-| Payments     | **Stripe Checkout** + webhook handler                                    |
-| Data fetching| **TanStack Query (React Query) v5** — cached client fetching + SSR hydration |
-| State        | Zustand (cart, persisted to localStorage)                                |
-| Validation   | Zod                                                                      |
-| UX           | next-themes (light/dark), Sonner (toasts), Lucide icons, Framer Motion   |
+| Layer         | Tech                                                                         |
+| ------------- | ---------------------------------------------------------------------------- |
+| Framework     | **Next.js 15** App Router, React 19, Server Components                       |
+| Language      | TypeScript 5, strict mode                                                    |
+| Styling       | Tailwind CSS 3 + CSS variables, shadcn-style primitives, Radix UI            |
+| Database      | **Drizzle ORM** over Postgres (Supabase or any Postgres)                     |
+| Auth          | **Supabase Auth** (email/password) via `@supabase/ssr`                       |
+| Payments      | **Stripe Checkout** + webhook handler                                        |
+| Data fetching | **TanStack Query (React Query) v5** — cached client fetching + SSR hydration |
+| State         | Zustand (cart, persisted to localStorage)                                    |
+| Validation    | Zod                                                                          |
+| UX            | next-themes (light/dark), Sonner (toasts), Lucide icons, Framer Motion       |
 
 ## What's inside
 

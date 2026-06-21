@@ -8,6 +8,7 @@ import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { ThemeProvider } from "@/components/theme-provider";
 import { QueryProvider } from "@/components/query-provider";
+import { appUrl } from "@/lib/env";
 
 const sans = Inter({
   subsets: ["latin"],
@@ -22,19 +23,35 @@ const serif = Cormorant_Garamond({
   display: "swap",
 });
 
+const description =
+  "A curated fashion edit. The best shirts, dresses, footwear, watches and accessories from the labels we love.";
+
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000"),
+  metadataBase: new URL(appUrl),
   title: {
-    default: "FOLIO · Considered essentials",
+    default: "FOLIO · A curated fashion edit",
     template: "%s · FOLIO",
   },
-  description:
-    "Considered essentials, made by craftspeople we trust. Minimalist clothing built to last.",
+  description,
+  keywords: [
+    "fashion",
+    "ecommerce",
+    "curated",
+    "shirts",
+    "dresses",
+    "watches",
+    "accessories",
+  ],
   openGraph: {
-    title: "FOLIO · Considered essentials",
-    description:
-      "Considered essentials, made by craftspeople we trust. Minimalist clothing built to last.",
+    title: "FOLIO · A curated fashion edit",
+    description,
     type: "website",
+    siteName: "FOLIO",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "FOLIO · A curated fashion edit",
+    description,
   },
 };
 

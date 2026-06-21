@@ -16,7 +16,7 @@ export async function GET(req: Request) {
   if (category) products = products.filter((p) => p.category === category);
   if (collection)
     products = products.filter(
-      (p) => p.collection.toLowerCase() === collection.toLowerCase()
+      (p) => p.collection.toLowerCase() === collection.toLowerCase(),
     );
   if (q) {
     products = products.filter(
@@ -24,7 +24,7 @@ export async function GET(req: Request) {
         p.name.toLowerCase().includes(q) ||
         p.brand?.toLowerCase().includes(q) ||
         p.category.toLowerCase().includes(q) ||
-        p.tags.some((t) => t.toLowerCase().includes(q))
+        p.tags.some((t) => t.toLowerCase().includes(q)),
     );
   }
 

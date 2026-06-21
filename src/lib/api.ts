@@ -23,18 +23,18 @@ export function fetchProducts(filter: ProductsFilter = {}) {
     params.set("collection", filter.collection);
   const qs = params.toString();
   return getJson<{ products: Product[] }>(
-    `/api/products${qs ? `?${qs}` : ""}`
+    `/api/products${qs ? `?${qs}` : ""}`,
   ).then((d) => d.products);
 }
 
 export function fetchProduct(slug: string) {
   return getJson<{ product: Product; related: Product[] }>(
-    `/api/products/${slug}`
+    `/api/products/${slug}`,
   );
 }
 
 export function searchProducts(q: string) {
   return getJson<{ products: Product[] }>(
-    `/api/products?q=${encodeURIComponent(q)}`
+    `/api/products?q=${encodeURIComponent(q)}`,
   ).then((d) => d.products);
 }

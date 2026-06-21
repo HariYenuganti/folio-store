@@ -3,11 +3,7 @@
 import { ProductImage } from "@/components/product-image";
 import Link from "next/link";
 import { Minus, Plus, X } from "lucide-react";
-import {
-  Dialog,
-  DialogContent,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { useCart, cartSubtotal } from "@/store/cart";
@@ -85,7 +81,7 @@ export function CartDrawer() {
                               item.productId,
                               item.size,
                               item.color,
-                              item.quantity - 1
+                              item.quantity - 1,
                             )
                           }
                           className="px-2 py-1 hover:bg-accent"
@@ -102,7 +98,7 @@ export function CartDrawer() {
                               item.productId,
                               item.size,
                               item.color,
-                              item.quantity + 1
+                              item.quantity + 1,
                             )
                           }
                           className="px-2 py-1 hover:bg-accent"

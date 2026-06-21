@@ -12,7 +12,7 @@ const Label = React.forwardRef<
     ref={ref}
     className={cn(
       "text-xs uppercase tracking-widest text-muted-foreground",
-      className
+      className,
     )}
     {...props}
   />

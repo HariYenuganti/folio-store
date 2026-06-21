@@ -13,7 +13,7 @@ interface CartState {
     productId: string,
     size: string,
     color: string,
-    quantity: number
+    quantity: number,
   ) => void;
   clear: () => void;
   open: () => void;
@@ -37,7 +37,7 @@ export const useCart = create<CartState>()(
               items: s.items.map((i) =>
                 sameLine(i, item)
                   ? { ...i, quantity: i.quantity + item.quantity }
-                  : i
+                  : i,
               ),
               isOpen: true,
             };
@@ -48,7 +48,11 @@ export const useCart = create<CartState>()(
         set((s) => ({
           items: s.items.filter(
             (i) =>
-              !(i.productId === productId && i.size === size && i.color === color)
+              !(
+                i.productId === productId &&
+                i.size === size &&
+                i.color === color
+              ),
           ),
         })),
       setQuantity: (productId, size, color, quantity) =>
@@ -57,7 +61,7 @@ export const useCart = create<CartState>()(
             .map((i) =>
               i.productId === productId && i.size === size && i.color === color
                 ? { ...i, quantity: Math.max(1, quantity) }
-                : i
+                : i,
             )
             .filter((i) => i.quantity > 0),
         })),
@@ -66,8 +70,8 @@ export const useCart = create<CartState>()(
       close: () => set({ isOpen: false }),
       toggle: () => set((s) => ({ isOpen: !s.isOpen })),
     }),
-    { name: "form-cart", partialize: (s) => ({ items: s.items }) }
-  )
+    { name: "form-cart", partialize: (s) => ({ items: s.items }) },
+  ),
 );
 
 export const cartSubtotal = (items: CartItem[]) =>

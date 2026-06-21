@@ -43,7 +43,7 @@ export function Header() {
       <header
         className={cn(
           "sticky top-0 z-40 border-b border-border bg-background/80 backdrop-blur transition-shadow",
-          scrolled && "shadow-[0_1px_0_0_hsl(var(--border))]"
+          scrolled && "shadow-[0_1px_0_0_hsl(var(--border))]",
         )}
       >
         <div className="container flex h-16 items-center justify-between gap-4">

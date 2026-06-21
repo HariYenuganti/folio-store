@@ -77,7 +77,7 @@ export function ProductDetail({ product }: { product: Product }) {
                   "relative aspect-square overflow-hidden border bg-muted transition-opacity",
                   i === activeImage
                     ? "border-foreground opacity-100"
-                    : "border-transparent opacity-70 hover:opacity-100"
+                    : "border-transparent opacity-70 hover:opacity-100",
                 )}
               >
                 <ProductImage
@@ -102,10 +102,7 @@ export function ProductDetail({ product }: { product: Product }) {
 
         <div className="mt-4 flex items-baseline gap-3">
           <span
-            className={cn(
-              "text-lg tabular-nums",
-              onSale && "text-destructive"
-            )}
+            className={cn("text-lg tabular-nums", onSale && "text-destructive")}
           >
             {formatPrice(product.price)}
           </span>
@@ -129,12 +126,14 @@ export function ProductDetail({ product }: { product: Product }) {
                         "h-3.5 w-3.5",
                         i < Math.round(product.rating!)
                           ? "fill-foreground text-foreground"
-                          : "text-muted-foreground/40"
+                          : "text-muted-foreground/40",
                       )}
                     />
                   ))}
                 </div>
-                <span className="tabular-nums">{product.rating.toFixed(1)}</span>
+                <span className="tabular-nums">
+                  {product.rating.toFixed(1)}
+                </span>
                 {product.reviewCount ? (
                   <span className="text-muted-foreground">
                     ({product.reviewCount} reviews)
@@ -152,7 +151,7 @@ export function ProductDetail({ product }: { product: Product }) {
                 className={cn(
                   product.stock > 10
                     ? "text-muted-foreground"
-                    : "font-medium text-destructive"
+                    : "font-medium text-destructive",
                 )}
               >
                 {product.stock > 10
@@ -187,7 +186,7 @@ export function ProductDetail({ product }: { product: Product }) {
                   "h-9 w-9 rounded-full border-2 transition-all",
                   color === c.name
                     ? "border-foreground"
-                    : "border-transparent ring-1 ring-border hover:ring-foreground/50"
+                    : "border-transparent ring-1 ring-border hover:ring-foreground/50",
                 )}
                 style={{ backgroundColor: c.hex }}
               />
@@ -214,7 +213,7 @@ export function ProductDetail({ product }: { product: Product }) {
                   "border py-2.5 text-xs uppercase tracking-widest transition-colors",
                   size === s
                     ? "border-foreground bg-foreground text-background"
-                    : "border-border hover:border-foreground"
+                    : "border-border hover:border-foreground",
                 )}
               >
                 {s}
@@ -244,11 +243,7 @@ export function ProductDetail({ product }: { product: Product }) {
               <Plus className="h-4 w-4" />
             </button>
           </div>
-          <Button
-            size="lg"
-            className="flex-1 rounded-none"
-            onClick={handleAdd}
-          >
+          <Button size="lg" className="flex-1 rounded-none" onClick={handleAdd}>
             <ShoppingBag className="h-4 w-4" />
             Add to bag · {formatPrice(product.price * quantity)}
           </Button>
@@ -293,7 +288,10 @@ export function ProductDetail({ product }: { product: Product }) {
               <AccordionContent>
                 <ul className="space-y-4">
                   {product.reviews.map((r, i) => (
-                    <li key={i} className="border-b border-border pb-4 last:border-0 last:pb-0">
+                    <li
+                      key={i}
+                      className="border-b border-border pb-4 last:border-0 last:pb-0"
+                    >
                       <div className="flex items-center gap-2">
                         <div className="flex">
                           {Array.from({ length: 5 }).map((_, j) => (
@@ -303,7 +301,7 @@ export function ProductDetail({ product }: { product: Product }) {
                                 "h-3 w-3",
                                 j < r.rating
                                   ? "fill-foreground text-foreground"
-                                  : "text-muted-foreground/40"
+                                  : "text-muted-foreground/40",
                               )}
                             />
                           ))}

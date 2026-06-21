@@ -16,17 +16,17 @@ export async function createClient() {
           return cookieStore.getAll();
         },
         setAll(
-          values: { name: string; value: string; options?: CookieOptions }[]
+          values: { name: string; value: string; options?: CookieOptions }[],
         ) {
           try {
             values.forEach(({ name, value, options }) =>
-              cookieStore.set(name, value, options)
+              cookieStore.set(name, value, options),
             );
           } catch {
             // setAll may be called from a Server Component — ignore.
           }
         },
       },
-    }
+    },
   );
 }

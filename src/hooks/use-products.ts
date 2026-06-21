@@ -16,7 +16,7 @@ import type { Product } from "@/types";
  */
 export function useProducts(
   filter: ProductsFilter = {},
-  initialData?: Product[]
+  initialData?: Product[],
 ) {
   return useQuery({
     queryKey: queryKeys.products(filter),

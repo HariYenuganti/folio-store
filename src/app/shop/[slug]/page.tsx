@@ -42,8 +42,37 @@ export default async function ProductPage({
 
   const related = getRelatedProducts(product.id);
 
+  // Product structured data for rich search results.
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: product.name,
+    description: product.description,
+    image: product.images,
+    ...(product.brand && { brand: { "@type": "Brand", name: product.brand } }),
+    offers: {
+      "@type": "Offer",
+      priceCurrency: "USD",
+      price: (product.price / 100).toFixed(2),
+      availability: product.inStock
+        ? "https://schema.org/InStock"
+        : "https://schema.org/OutOfStock",
+    },
+    ...(product.rating && {
+      aggregateRating: {
+        "@type": "AggregateRating",
+        ratingValue: product.rating,
+        reviewCount: product.reviewCount ?? product.reviews?.length ?? 1,
+      },
+    }),
+  };
+
   return (
     <div>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <div className="container py-4 text-xs uppercase tracking-widest text-muted-foreground">
         <Link href="/" className="hover:text-foreground">
           Home

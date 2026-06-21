@@ -70,7 +70,7 @@ export function getFeaturedProducts(): Product[] {
  */
 export function getEditPicks(limit = 8): Product[] {
   const byRating = [...PRODUCTS].sort(
-    (a, b) => (b.rating ?? 0) - (a.rating ?? 0)
+    (a, b) => (b.rating ?? 0) - (a.rating ?? 0),
   );
   const picks: Product[] = [];
   const chosen = new Set<string>();
@@ -98,7 +98,7 @@ export function getEditPicks(limit = 8): Product[] {
 /** Representative cover image for a collection (its highest-rated product). */
 export function getCollectionCoverImage(slug: string): string | null {
   const items = PRODUCTS.filter(
-    (p) => p.collection.toLowerCase() === slug.toLowerCase()
+    (p) => p.collection.toLowerCase() === slug.toLowerCase(),
   );
   if (!items.length) return null;
   const top = [...items].sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0))[0];
@@ -112,10 +112,10 @@ export function getNewArrivals(): Product[] {
 /** Min/max price (in cents) of the products in a collection — used to label
  *  the price tiers in the UI. Returns null for an empty collection. */
 export function getCollectionPriceRange(
-  slug: string
+  slug: string,
 ): { min: number; max: number } | null {
   const items = PRODUCTS.filter(
-    (p) => p.collection.toLowerCase() === slug.toLowerCase()
+    (p) => p.collection.toLowerCase() === slug.toLowerCase(),
   );
   if (!items.length) return null;
   const prices = items.map((p) => p.price);
@@ -126,11 +126,11 @@ export function getRelatedProducts(productId: string, limit = 4): Product[] {
   const product = PRODUCTS.find((p) => p.id === productId);
   if (!product) return [];
   const sameCategory = PRODUCTS.filter(
-    (p) => p.id !== productId && p.category === product.category
+    (p) => p.id !== productId && p.category === product.category,
   );
   // Fall back to other products if a category is too small to fill the row.
   const fill = PRODUCTS.filter(
-    (p) => p.id !== productId && p.category !== product.category
+    (p) => p.id !== productId && p.category !== product.category,
   );
   return [...sameCategory, ...fill].slice(0, limit);
 }

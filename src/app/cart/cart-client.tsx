@@ -91,7 +91,7 @@ export function CartPageClient() {
                           item.productId,
                           item.size,
                           item.color,
-                          item.quantity - 1
+                          item.quantity - 1,
                         )
                       }
                       className="px-3 py-2 hover:bg-accent"
@@ -108,7 +108,7 @@ export function CartPageClient() {
                           item.productId,
                           item.size,
                           item.color,
-                          item.quantity + 1
+                          item.quantity + 1,
                         )
                       }
                       className="px-3 py-2 hover:bg-accent"

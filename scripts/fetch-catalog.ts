@@ -99,16 +99,17 @@ function colorsFromTitle(title: string): { name: string; hex: string }[] {
   const found: { name: string; hex: string }[] = [];
   for (const w of words) {
     if (COLOR_WORDS[w] && !found.some((c) => c.name.toLowerCase() === w)) {
-      found.push({ name: w[0].toUpperCase() + w.slice(1), hex: COLOR_WORDS[w] });
+      found.push({
+        name: w[0].toUpperCase() + w.slice(1),
+        hex: COLOR_WORDS[w],
+      });
     }
   }
   return found.length ? found : [{ name: "As shown", hex: "#9aa0a6" }];
 }
 
 async function fetchCategory(cat: string): Promise<DummyProduct[]> {
-  const res = await fetch(
-    `${API}/products/category/${cat}?limit=0`
-  );
+  const res = await fetch(`${API}/products/category/${cat}?limit=0`);
   if (!res.ok) throw new Error(`Failed to fetch ${cat}: ${res.status}`);
   const data = (await res.json()) as { products: DummyProduct[] };
   return data.products;
@@ -132,9 +133,9 @@ async function main() {
   };
 
   // Highest-rated products become "featured" on the home page.
-  const ratingThreshold = [...raw]
-    .map((p) => p.rating)
-    .sort((a, b) => b - a)[Math.min(7, raw.length - 1)];
+  const ratingThreshold = [...raw].map((p) => p.rating).sort((a, b) => b - a)[
+    Math.min(7, raw.length - 1)
+  ];
 
   // Final (post-discount) price in cents.
   const finalPrice = (p: DummyProduct) => {

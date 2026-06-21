@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { ProductImage } from "@/components/product-image";
 import { Lock } from "lucide-react";
 import { toast } from "sonner";
@@ -24,11 +25,9 @@ export function CheckoutClient() {
     return (
       <div className="container flex min-h-[60vh] flex-col items-center justify-center text-center">
         <h1 className="font-serif text-3xl">Nothing to check out</h1>
-        <p className="mt-3 text-sm text-muted-foreground">
-          Your bag is empty.
-        </p>
+        <p className="mt-3 text-sm text-muted-foreground">Your bag is empty.</p>
         <Button asChild className="mt-6 rounded-none">
-          <a href="/shop">Continue shopping</a>
+          <Link href="/shop">Continue shopping</Link>
         </Button>
       </div>
     );
@@ -41,7 +40,10 @@ export function CheckoutClient() {
       const res = await fetch("/api/checkout", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ items, email: new FormData(e.currentTarget).get("email") }),
+        body: JSON.stringify({
+          items,
+          email: new FormData(e.currentTarget).get("email"),
+        }),
       });
       const data: { url?: string; mockOrderId?: string; error?: string } =
         await res.json();
@@ -103,23 +105,48 @@ export function CheckoutClient() {
             <div className="mt-4 grid gap-4 sm:grid-cols-2">
               <div>
                 <Label htmlFor="firstName">First name</Label>
-                <Input id="firstName" name="firstName" required className="mt-2 rounded-none" />
+                <Input
+                  id="firstName"
+                  name="firstName"
+                  required
+                  className="mt-2 rounded-none"
+                />
               </div>
               <div>
                 <Label htmlFor="lastName">Last name</Label>
-                <Input id="lastName" name="lastName" required className="mt-2 rounded-none" />
+                <Input
+                  id="lastName"
+                  name="lastName"
+                  required
+                  className="mt-2 rounded-none"
+                />
               </div>
               <div className="sm:col-span-2">
                 <Label htmlFor="address">Address</Label>
-                <Input id="address" name="address" required className="mt-2 rounded-none" />
+                <Input
+                  id="address"
+                  name="address"
+                  required
+                  className="mt-2 rounded-none"
+                />
               </div>
               <div>
                 <Label htmlFor="city">City</Label>
-                <Input id="city" name="city" required className="mt-2 rounded-none" />
+                <Input
+                  id="city"
+                  name="city"
+                  required
+                  className="mt-2 rounded-none"
+                />
               </div>
               <div>
                 <Label htmlFor="postal">Postal code</Label>
-                <Input id="postal" name="postal" required className="mt-2 rounded-none" />
+                <Input
+                  id="postal"
+                  name="postal"
+                  required
+                  className="mt-2 rounded-none"
+                />
               </div>
               <div className="sm:col-span-2">
                 <Label htmlFor="country">Country</Label>

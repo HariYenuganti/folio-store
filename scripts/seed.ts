@@ -13,7 +13,7 @@ import { PRODUCTS } from "../src/lib/data/products";
 async function main() {
   if (!isDatabaseEnabled) {
     console.error(
-      "✗ DATABASE_URL is not set. Add it to .env.local before seeding."
+      "✗ DATABASE_URL is not set. Add it to .env.local before seeding.",
     );
     process.exit(1);
   }
@@ -39,7 +39,7 @@ async function main() {
         inStock: p.inStock,
         featured: !!p.featured,
         newArrival: !!p.newArrival,
-      }))
+      })),
     )
     .onConflictDoNothing();
   console.log("✓ Done.");

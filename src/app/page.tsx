@@ -113,42 +113,44 @@ export default function HomePage() {
               const range = getCollectionPriceRange(c.slug);
               const cover = getCollectionCoverImage(c.slug);
               return (
-              <Link
-                key={c.slug}
-                href={`/shop?collection=${c.slug}`}
-                className="group relative aspect-[4/5] overflow-hidden bg-muted"
-              >
-                {cover && (
-                  <Image
-                    src={cover}
-                    alt={c.name}
-                    fill
-                    sizes="(min-width: 768px) 33vw, 100vw"
-                    className="object-cover transition-transform duration-700 group-hover:scale-[1.04]"
-                  />
-                )}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent" />
-                <div className="absolute inset-x-0 bottom-0 p-6 text-background">
-                  <p className="text-xs uppercase tracking-[0.28em] opacity-80">
-                    {String(i + 1).padStart(2, "0")}
-                  </p>
-                  <div className="flex items-baseline justify-between gap-2">
-                    <h3 className="mt-2 font-serif text-3xl">{c.name}</h3>
-                    {range && (
-                      <span className="text-xs uppercase tracking-widest opacity-80">
-                        {range.min === range.max
-                          ? formatPrice(range.min)
-                          : `${formatPrice(range.min)} – ${formatPrice(range.max)}`}
-                      </span>
-                    )}
+                <Link
+                  key={c.slug}
+                  href={`/shop?collection=${c.slug}`}
+                  className="group relative aspect-[4/5] overflow-hidden bg-muted"
+                >
+                  {cover && (
+                    <Image
+                      src={cover}
+                      alt={c.name}
+                      fill
+                      sizes="(min-width: 768px) 33vw, 100vw"
+                      className="object-cover transition-transform duration-700 group-hover:scale-[1.04]"
+                    />
+                  )}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent" />
+                  <div className="absolute inset-x-0 bottom-0 p-6 text-background">
+                    <p className="text-xs uppercase tracking-[0.28em] opacity-80">
+                      {String(i + 1).padStart(2, "0")}
+                    </p>
+                    <div className="flex items-baseline justify-between gap-2">
+                      <h3 className="mt-2 font-serif text-3xl">{c.name}</h3>
+                      {range && (
+                        <span className="text-xs uppercase tracking-widest opacity-80">
+                          {range.min === range.max
+                            ? formatPrice(range.min)
+                            : `${formatPrice(range.min)} – ${formatPrice(range.max)}`}
+                        </span>
+                      )}
+                    </div>
+                    <p className="mt-1 max-w-xs text-sm opacity-90">
+                      {c.tagline}
+                    </p>
+                    <span className="mt-4 inline-flex items-center gap-2 text-xs uppercase tracking-widest underline-offset-4 group-hover:underline">
+                      Shop {c.name}
+                      <ArrowRight className="h-3 w-3" />
+                    </span>
                   </div>
-                  <p className="mt-1 max-w-xs text-sm opacity-90">{c.tagline}</p>
-                  <span className="mt-4 inline-flex items-center gap-2 text-xs uppercase tracking-widest underline-offset-4 group-hover:underline">
-                    Shop {c.name}
-                    <ArrowRight className="h-3 w-3" />
-                  </span>
-                </div>
-              </Link>
+                </Link>
               );
             })}
           </div>
