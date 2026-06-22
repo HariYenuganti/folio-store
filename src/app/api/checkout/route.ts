@@ -44,6 +44,10 @@ export async function POST(req: Request) {
 
   try {
     const appUrl = getAppUrl();
+    // Mirror the UI's shipping rule (free over $200, else $15) so the amount
+    // Stripe charges matches the total shown at checkout.
+    const subtotal = items.reduce((sum, i) => sum + i.price * i.quantity, 0);
+    const shippingAmount = subtotal >= 20000 ? 0 : 1500;
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
       payment_method_types: ["card"],
@@ -67,6 +71,20 @@ export async function POST(req: Request) {
       shipping_address_collection: {
         allowed_countries: ["US", "CA", "GB", "DE", "FR", "JP", "AU"],
       },
+      shipping_options: [
+        {
+          shipping_rate_data: {
+            type: "fixed_amount",
+            fixed_amount: { amount: shippingAmount, currency: "usd" },
+            display_name:
+              shippingAmount === 0 ? "Free shipping" : "Standard shipping",
+            delivery_estimate: {
+              minimum: { unit: "business_day", value: 2 },
+              maximum: { unit: "business_day", value: 4 },
+            },
+          },
+        },
+      ],
       success_url: `${appUrl}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${appUrl}/cart`,
     });
