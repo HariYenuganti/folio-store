@@ -1,17 +1,15 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import {
-  getProductBySlug,
-  getRelatedProducts,
-  getAllProducts,
-} from "@/lib/data/products";
+import { getProductBySlug, getRelatedProducts } from "@/lib/data/products";
+import { getCatalog } from "@/lib/data/repository";
 import { ProductDetail } from "./product-detail";
 import { ProductGrid } from "@/components/product-grid";
 import { RecordView } from "@/components/record-view";
 import { RecentlyViewed } from "@/components/recently-viewed";
 
-export function generateStaticParams() {
-  return getAllProducts().map((p) => ({ slug: p.slug }));
+export async function generateStaticParams() {
+  const catalog = await getCatalog();
+  return catalog.map((p) => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({
@@ -20,7 +18,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const product = getProductBySlug(slug);
+  const product = getProductBySlug(slug, await getCatalog());
   if (!product) return { title: "Not found" };
   return {
     title: product.name,
@@ -39,10 +37,11 @@ export default async function ProductPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const product = getProductBySlug(slug);
+  const catalog = await getCatalog();
+  const product = getProductBySlug(slug, catalog);
   if (!product) notFound();
 
-  const related = getRelatedProducts(product.id);
+  const related = getRelatedProducts(product.id, 4, catalog);
 
   // Product structured data for rich search results.
   const jsonLd = {

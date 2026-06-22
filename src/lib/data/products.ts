@@ -46,21 +46,31 @@ export const CATEGORIES = [
 ] as const;
 
 // ---- Data access ----
+//
+// These helpers are pure over a product list, defaulting to the mock catalog.
+// Server entry points pass the DB-backed list (see src/lib/data/repository.ts);
+// client-side callers use the default mock list, which mirrors the seed data.
 
-export function getAllProducts(): Product[] {
-  return PRODUCTS;
+export function getAllProducts(list: Product[] = PRODUCTS): Product[] {
+  return list;
 }
 
-export function getProductBySlug(slug: string): Product | undefined {
-  return PRODUCTS.find((p) => p.slug === slug);
+export function getProductBySlug(
+  slug: string,
+  list: Product[] = PRODUCTS,
+): Product | undefined {
+  return list.find((p) => p.slug === slug);
 }
 
-export function getProductsByCategory(category: string): Product[] {
-  return PRODUCTS.filter((p) => p.category === category);
+export function getProductsByCategory(
+  category: string,
+  list: Product[] = PRODUCTS,
+): Product[] {
+  return list.filter((p) => p.category === category);
 }
 
-export function getFeaturedProducts(): Product[] {
-  return PRODUCTS.filter((p) => p.featured);
+export function getFeaturedProducts(list: Product[] = PRODUCTS): Product[] {
+  return list.filter((p) => p.featured);
 }
 
 /**
@@ -68,10 +78,8 @@ export function getFeaturedProducts(): Product[] {
  * then the next-best overall to fill the row. Keeps the home feature grid from
  * being dominated by a single category (e.g. all sneakers).
  */
-export function getEditPicks(limit = 8): Product[] {
-  const byRating = [...PRODUCTS].sort(
-    (a, b) => (b.rating ?? 0) - (a.rating ?? 0),
-  );
+export function getEditPicks(limit = 8, list: Product[] = PRODUCTS): Product[] {
+  const byRating = [...list].sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0));
   const picks: Product[] = [];
   const chosen = new Set<string>();
 
@@ -96,8 +104,11 @@ export function getEditPicks(limit = 8): Product[] {
 }
 
 /** Representative cover image for a collection (its highest-rated product). */
-export function getCollectionCoverImage(slug: string): string | null {
-  const items = PRODUCTS.filter(
+export function getCollectionCoverImage(
+  slug: string,
+  list: Product[] = PRODUCTS,
+): string | null {
+  const items = list.filter(
     (p) => p.collection.toLowerCase() === slug.toLowerCase(),
   );
   if (!items.length) return null;
@@ -105,16 +116,17 @@ export function getCollectionCoverImage(slug: string): string | null {
   return top.images[0] ?? null;
 }
 
-export function getNewArrivals(): Product[] {
-  return PRODUCTS.filter((p) => p.newArrival);
+export function getNewArrivals(list: Product[] = PRODUCTS): Product[] {
+  return list.filter((p) => p.newArrival);
 }
 
 /** Min/max price (in cents) of the products in a collection — used to label
  *  the price tiers in the UI. Returns null for an empty collection. */
 export function getCollectionPriceRange(
   slug: string,
+  list: Product[] = PRODUCTS,
 ): { min: number; max: number } | null {
-  const items = PRODUCTS.filter(
+  const items = list.filter(
     (p) => p.collection.toLowerCase() === slug.toLowerCase(),
   );
   if (!items.length) return null;
@@ -122,14 +134,18 @@ export function getCollectionPriceRange(
   return { min: Math.min(...prices), max: Math.max(...prices) };
 }
 
-export function getRelatedProducts(productId: string, limit = 4): Product[] {
-  const product = PRODUCTS.find((p) => p.id === productId);
+export function getRelatedProducts(
+  productId: string,
+  limit = 4,
+  list: Product[] = PRODUCTS,
+): Product[] {
+  const product = list.find((p) => p.id === productId);
   if (!product) return [];
-  const sameCategory = PRODUCTS.filter(
+  const sameCategory = list.filter(
     (p) => p.id !== productId && p.category === product.category,
   );
   // Fall back to other products if a category is too small to fill the row.
-  const fill = PRODUCTS.filter(
+  const fill = list.filter(
     (p) => p.id !== productId && p.category !== product.category,
   );
   return [...sameCategory, ...fill].slice(0, limit);

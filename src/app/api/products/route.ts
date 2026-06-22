@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getAllProducts } from "@/lib/data/products";
+import { getCatalog } from "@/lib/data/repository";
 
 /**
  * Product catalog endpoint consumed by TanStack Query on the client.
@@ -12,7 +12,7 @@ export async function GET(req: Request) {
   const collection = searchParams.get("collection");
   const q = searchParams.get("q")?.trim().toLowerCase();
 
-  let products = getAllProducts();
+  let products = await getCatalog();
   if (category) products = products.filter((p) => p.category === category);
   if (collection)
     products = products.filter(

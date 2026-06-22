@@ -18,3 +18,4 @@ export function getDb() {
 }
 
 export { schema };
+export type { ProductRow, OrderRow } from "./schema";

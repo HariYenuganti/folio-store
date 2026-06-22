@@ -80,6 +80,13 @@ checkout redirects to Stripe.
 > to switch between modes. See `src/lib/stripe.ts`, `src/lib/supabase/*`,
 > and `src/lib/db/index.ts` for the feature flags.
 
+**Catalog source.** Server code reads the catalog through
+`src/lib/data/repository.ts`: when `DATABASE_URL` is set _and_ the `products`
+table has rows, products come from Postgres; otherwise it falls back to the
+baked `catalog.json`. The fallback also covers a DB that's unreachable or not
+yet seeded, so the storefront never goes down. (Client-only lookups — wishlist,
+recently-viewed — use the baked catalog, which mirrors the seed.)
+
 ## Project layout
 
 ```

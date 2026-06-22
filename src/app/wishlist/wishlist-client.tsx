@@ -18,7 +18,7 @@ export function WishlistClient() {
   if (!mounted) return <ProductGridSkeleton count={4} />;
 
   const products = slugs
-    .map(getProductBySlug)
+    .map((s) => getProductBySlug(s))
     .filter((p): p is Product => Boolean(p));
 
   if (products.length === 0) {

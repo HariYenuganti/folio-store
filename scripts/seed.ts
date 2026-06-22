@@ -39,6 +39,11 @@ async function main() {
         inStock: p.inStock,
         featured: !!p.featured,
         newArrival: !!p.newArrival,
+        rating: p.rating ?? null,
+        reviewCount: p.reviewCount ?? null,
+        reviews: p.reviews ?? [],
+        brand: p.brand ?? null,
+        stock: p.stock ?? null,
       })),
     )
     .onConflictDoNothing();

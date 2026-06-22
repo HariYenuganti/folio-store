@@ -2,11 +2,19 @@ import {
   pgTable,
   text,
   integer,
+  real,
   boolean,
   timestamp,
   jsonb,
   uuid,
 } from "drizzle-orm/pg-core";
+
+type ReviewRow = {
+  rating: number;
+  comment: string;
+  reviewerName: string;
+  date: string;
+};
 
 /**
  * Drizzle schema for the optional Postgres backend.
@@ -33,6 +41,11 @@ export const products = pgTable("products", {
   inStock: boolean("in_stock").notNull().default(true),
   featured: boolean("featured").notNull().default(false),
   newArrival: boolean("new_arrival").notNull().default(false),
+  rating: real("rating"),
+  reviewCount: integer("review_count"),
+  reviews: jsonb("reviews").$type<ReviewRow[]>().notNull().default([]),
+  brand: text("brand"),
+  stock: integer("stock"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 

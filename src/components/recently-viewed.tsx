@@ -25,7 +25,7 @@ export function RecentlyViewed({
 
   const products = slugs
     .filter((s) => s !== excludeSlug)
-    .map(getProductBySlug)
+    .map((s) => getProductBySlug(s))
     .filter((p): p is Product => Boolean(p))
     .slice(0, 4);
 

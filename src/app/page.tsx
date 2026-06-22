@@ -12,10 +12,12 @@ import {
   getEditPicks,
   getNewArrivals,
 } from "@/lib/data/products";
+import { getCatalog } from "@/lib/data/repository";
 
-export default function HomePage() {
-  const featured = getEditPicks(8);
-  const newArrivals = getNewArrivals().slice(0, 8);
+export default async function HomePage() {
+  const catalog = await getCatalog();
+  const featured = getEditPicks(8, catalog);
+  const newArrivals = getNewArrivals(catalog).slice(0, 8);
 
   return (
     <>
@@ -111,8 +113,8 @@ export default function HomePage() {
           </div>
           <div className="grid gap-6 md:grid-cols-3">
             {COLLECTIONS.map((c, i) => {
-              const range = getCollectionPriceRange(c.slug);
-              const cover = getCollectionCoverImage(c.slug);
+              const range = getCollectionPriceRange(c.slug, catalog);
+              const cover = getCollectionCoverImage(c.slug, catalog);
               return (
                 <Link
                   key={c.slug}
