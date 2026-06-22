@@ -5,51 +5,13 @@ import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import { ProductImage } from "@/components/product-image";
 import { formatPrice } from "@/lib/utils";
 import { createClient } from "@/lib/supabase/client";
-
-interface OrderItem {
-  name?: string;
-  slug?: string | null;
-  size?: string | null;
-  color?: string | null;
-  image?: string | null;
-  quantity?: number;
-  amount?: number;
-}
-
-interface Address {
-  line1?: string | null;
-  line2?: string | null;
-  city?: string | null;
-  state?: string | null;
-  postal_code?: string | null;
-  country?: string | null;
-}
-
-interface OrderRow {
-  id: string;
-  created_at: string;
-  status: string;
-  total: number;
-  email: string | null;
-  items: OrderItem[];
-  shipping_address: Address | null;
-}
-
-const fmtDate = (iso: string) =>
-  new Date(iso).toLocaleDateString("en-US", {
-    month: "short",
-    day: "2-digit",
-    year: "numeric",
-  });
+import {
+  OrderDetailDialog,
+  fmtDate,
+  type OrderRow,
+} from "./order-detail-dialog";
 
 export function OrdersClient() {
   const [loading, setLoading] = useState(true);
@@ -161,129 +123,10 @@ export function OrdersClient() {
         Select an order to see its details.
       </p>
 
-      <Dialog
-        open={!!selected}
+      <OrderDetailDialog
+        order={selected}
         onOpenChange={(open) => !open && setSelected(null)}
-      >
-        <DialogContent className="sm:max-w-md">
-          {selected && (
-            <>
-              <DialogHeader>
-                <DialogTitle>
-                  Order {selected.id.slice(0, 8).toUpperCase()}
-                </DialogTitle>
-                <div className="flex items-center gap-3 pt-1">
-                  <span className="text-xs text-muted-foreground">
-                    {fmtDate(selected.created_at)}
-                  </span>
-                  <Badge
-                    variant={selected.status === "paid" ? "muted" : "outline"}
-                  >
-                    {selected.status === "paid" ? "Paid" : selected.status}
-                  </Badge>
-                </div>
-              </DialogHeader>
-
-              <ul className="mt-5 space-y-4">
-                {(selected.items ?? []).map((it, idx) => {
-                  const meta = [it.color, it.size].filter(Boolean).join(" · ");
-                  const body = (
-                    <>
-                      <div className="relative h-16 w-12 shrink-0 overflow-hidden bg-muted">
-                        {it.image && (
-                          <ProductImage
-                            src={it.image}
-                            alt={it.name ?? "Item"}
-                            fill
-                            sizes="48px"
-                            className="object-cover"
-                          />
-                        )}
-                      </div>
-                      <div className="min-w-0 flex-1">
-                        <p className="text-sm">{it.name ?? "Item"}</p>
-                        {meta && (
-                          <p className="mt-0.5 text-xs uppercase tracking-widest text-muted-foreground">
-                            {meta}
-                          </p>
-                        )}
-                        {it.quantity && it.quantity > 1 ? (
-                          <p className="mt-0.5 text-xs text-muted-foreground">
-                            Qty {it.quantity}
-                          </p>
-                        ) : null}
-                      </div>
-                      {typeof it.amount === "number" && (
-                        <span className="shrink-0 text-sm tabular-nums">
-                          {formatPrice(it.amount)}
-                        </span>
-                      )}
-                    </>
-                  );
-                  return (
-                    <li key={idx}>
-                      {it.slug ? (
-                        <Link
-                          href={`/shop/${it.slug}`}
-                          onClick={() => setSelected(null)}
-                          className="flex items-center gap-3 transition-opacity hover:opacity-70"
-                        >
-                          {body}
-                        </Link>
-                      ) : (
-                        <div className="flex items-center gap-3">{body}</div>
-                      )}
-                    </li>
-                  );
-                })}
-              </ul>
-
-              <Separator className="my-4" />
-
-              <div className="flex items-center justify-between text-sm">
-                <span className="uppercase tracking-widest">Total</span>
-                <span className="tabular-nums">
-                  {formatPrice(selected.total)}
-                </span>
-              </div>
-
-              {selected.shipping_address && (
-                <div className="mt-5">
-                  <p className="text-xs uppercase tracking-widest text-muted-foreground">
-                    Shipping to
-                  </p>
-                  <address className="mt-2 text-sm not-italic leading-relaxed text-muted-foreground">
-                    {[
-                      selected.shipping_address.line1,
-                      selected.shipping_address.line2,
-                      [
-                        selected.shipping_address.city,
-                        selected.shipping_address.state,
-                        selected.shipping_address.postal_code,
-                      ]
-                        .filter(Boolean)
-                        .join(", "),
-                      selected.shipping_address.country,
-                    ]
-                      .filter(Boolean)
-                      .map((line, idx) => (
-                        <span key={idx} className="block">
-                          {line}
-                        </span>
-                      ))}
-                  </address>
-                </div>
-              )}
-
-              {selected.email && (
-                <p className="mt-4 text-xs text-muted-foreground">
-                  Confirmation sent to {selected.email}
-                </p>
-              )}
-            </>
-          )}
-        </DialogContent>
-      </Dialog>
+      />
     </>
   );
 }
