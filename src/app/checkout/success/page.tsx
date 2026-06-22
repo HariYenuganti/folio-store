@@ -24,16 +24,28 @@ async function recordOrder(sessionId: string) {
 
   try {
     const session = await stripe.checkout.sessions.retrieve(sessionId, {
-      expand: ["line_items"],
+      expand: ["line_items.data.price.product"],
     });
     if (session.payment_status !== "paid" && session.status !== "complete")
       return;
 
-    const items = (session.line_items?.data ?? []).map((li) => ({
-      name: li.description,
-      quantity: li.quantity ?? 1,
-      amount: li.amount_total,
-    }));
+    const items = (session.line_items?.data ?? []).map((li) => {
+      const product = li.price?.product;
+      const prod =
+        product && typeof product === "object" && !("deleted" in product)
+          ? product
+          : null;
+      const meta = prod?.metadata ?? {};
+      return {
+        name: meta.name ?? prod?.name ?? li.description,
+        slug: meta.slug ?? null,
+        size: meta.size ?? null,
+        color: meta.color ?? null,
+        image: prod?.images?.[0] ?? null,
+        quantity: li.quantity ?? 1,
+        amount: li.amount_total,
+      };
+    });
 
     await supabase.from("orders").upsert(
       {

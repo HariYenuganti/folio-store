@@ -11,11 +11,16 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { ProductImage } from "@/components/product-image";
 import { formatPrice } from "@/lib/utils";
 import { createClient } from "@/lib/supabase/client";
 
 interface OrderItem {
   name?: string;
+  slug?: string | null;
+  size?: string | null;
+  color?: string | null;
+  image?: string | null;
   quantity?: number;
   amount?: number;
 }
@@ -179,28 +184,58 @@ export function OrdersClient() {
                 </div>
               </DialogHeader>
 
-              <ul className="mt-5 space-y-3">
-                {(selected.items ?? []).map((it, idx) => (
-                  <li
-                    key={idx}
-                    className="flex items-start justify-between gap-4 text-sm"
-                  >
-                    <span className="text-pretty">
-                      {it.name ?? "Item"}
-                      {it.quantity && it.quantity > 1 ? (
-                        <span className="text-muted-foreground">
-                          {" "}
-                          × {it.quantity}
+              <ul className="mt-5 space-y-4">
+                {(selected.items ?? []).map((it, idx) => {
+                  const meta = [it.color, it.size].filter(Boolean).join(" · ");
+                  const body = (
+                    <>
+                      <div className="relative h-16 w-12 shrink-0 overflow-hidden bg-muted">
+                        {it.image && (
+                          <ProductImage
+                            src={it.image}
+                            alt={it.name ?? "Item"}
+                            fill
+                            sizes="48px"
+                            className="object-cover"
+                          />
+                        )}
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <p className="text-sm">{it.name ?? "Item"}</p>
+                        {meta && (
+                          <p className="mt-0.5 text-xs uppercase tracking-widest text-muted-foreground">
+                            {meta}
+                          </p>
+                        )}
+                        {it.quantity && it.quantity > 1 ? (
+                          <p className="mt-0.5 text-xs text-muted-foreground">
+                            Qty {it.quantity}
+                          </p>
+                        ) : null}
+                      </div>
+                      {typeof it.amount === "number" && (
+                        <span className="shrink-0 text-sm tabular-nums">
+                          {formatPrice(it.amount)}
                         </span>
-                      ) : null}
-                    </span>
-                    {typeof it.amount === "number" && (
-                      <span className="shrink-0 tabular-nums">
-                        {formatPrice(it.amount)}
-                      </span>
-                    )}
-                  </li>
-                ))}
+                      )}
+                    </>
+                  );
+                  return (
+                    <li key={idx}>
+                      {it.slug ? (
+                        <Link
+                          href={`/shop/${it.slug}`}
+                          onClick={() => setSelected(null)}
+                          className="flex items-center gap-3 transition-opacity hover:opacity-70"
+                        >
+                          {body}
+                        </Link>
+                      ) : (
+                        <div className="flex items-center gap-3">{body}</div>
+                      )}
+                    </li>
+                  );
+                })}
               </ul>
 
               <Separator className="my-4" />

@@ -62,6 +62,8 @@ export async function POST(req: Request) {
             images: [i.image],
             metadata: {
               productId: i.productId,
+              name: i.name,
+              slug: i.slug,
               size: i.size,
               color: i.color,
             },
