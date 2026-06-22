@@ -7,6 +7,8 @@ import {
 } from "@/lib/data/products";
 import { ProductDetail } from "./product-detail";
 import { ProductGrid } from "@/components/product-grid";
+import { RecordView } from "@/components/record-view";
+import { RecentlyViewed } from "@/components/recently-viewed";
 
 export function generateStaticParams() {
   return getAllProducts().map((p) => ({ slug: p.slug }));
@@ -73,6 +75,7 @@ export default async function ProductPage({
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
+      <RecordView slug={product.slug} />
       <div className="container py-4 text-xs uppercase tracking-widest text-muted-foreground">
         <Link href="/" className="hover:text-foreground">
           Home
@@ -95,6 +98,8 @@ export default async function ProductPage({
           <ProductGrid products={related} />
         </section>
       )}
+
+      <RecentlyViewed excludeSlug={product.slug} />
     </div>
   );
 }

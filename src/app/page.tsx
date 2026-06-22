@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ProductGrid } from "@/components/product-grid";
+import { RecentlyViewed } from "@/components/recently-viewed";
 import { formatPrice } from "@/lib/utils";
 import {
   COLLECTIONS,
@@ -171,6 +172,9 @@ export default function HomePage() {
         </div>
         <ProductGrid products={newArrivals} />
       </section>
+
+      {/* RECENTLY VIEWED */}
+      <RecentlyViewed />
 
       {/* MANIFESTO */}
       <section className="relative overflow-hidden bg-foreground py-24 text-background">
