@@ -1,41 +1,68 @@
 import { cache } from "react";
-import { getDb, isDatabaseEnabled, schema, type ProductRow } from "@/lib/db";
+import { createClient } from "@supabase/supabase-js";
+import { env, isSupabaseConfigured } from "@/lib/env";
 import { PRODUCTS } from "./products";
 import type { Category, Product, Review, Size } from "@/types";
 
 /**
  * Catalog source of truth for server code.
  *
- * When DATABASE_URL is configured AND the products table has rows, the catalog
- * comes from Postgres. Otherwise it transparently falls back to the baked mock
- * catalog — so the storefront works with zero configuration, and "graduates" to
- * the real DB the moment one is connected and seeded.
+ * When Supabase is configured AND the `products` table has rows, the catalog
+ * comes from Supabase (read with the anon key via the public-read RLS policy).
+ * Otherwise it transparently falls back to the baked `catalog.json` — so the
+ * storefront works with zero configuration, survives an empty/unreachable
+ * backend, and "graduates" to the real database the moment one is connected
+ * and seeded.
  *
  * Pure derivations (related, featured, edit picks, …) live in `./products` and
  * take a product list, so they work identically over either source.
  */
 
-function rowToProduct(r: ProductRow): Product {
+interface ProductRecord {
+  id: string;
+  slug: string;
+  name: string;
+  description: string;
+  details: string[];
+  price: number;
+  compare_at_price: number | null;
+  category: string;
+  collection: string;
+  sizes: string[];
+  colors: { name: string; hex: string }[];
+  images: string[];
+  tags: string[];
+  in_stock: boolean;
+  featured: boolean;
+  new_arrival: boolean;
+  rating: number | null;
+  review_count: number | null;
+  reviews: Review[];
+  brand: string | null;
+  stock: number | null;
+}
+
+function rowToProduct(r: ProductRecord): Product {
   return {
     id: r.id,
     slug: r.slug,
     name: r.name,
     description: r.description,
-    details: r.details,
+    details: r.details ?? [],
     price: r.price,
-    compareAtPrice: r.compareAtPrice ?? undefined,
+    compareAtPrice: r.compare_at_price ?? undefined,
     category: r.category as Category,
     collection: r.collection,
-    sizes: r.sizes as Size[],
-    colors: r.colors,
-    images: r.images,
-    tags: r.tags,
-    inStock: r.inStock,
-    featured: r.featured,
-    newArrival: r.newArrival,
+    sizes: (r.sizes ?? []) as Size[],
+    colors: r.colors ?? [],
+    images: r.images ?? [],
+    tags: r.tags ?? [],
+    inStock: r.in_stock,
+    featured: r.featured || undefined,
+    newArrival: r.new_arrival || undefined,
     rating: r.rating ?? undefined,
-    reviewCount: r.reviewCount ?? undefined,
-    reviews: (r.reviews as Review[]) ?? undefined,
+    reviewCount: r.review_count ?? undefined,
+    reviews: r.reviews ?? undefined,
     brand: r.brand ?? undefined,
     stock: r.stock ?? undefined,
   };
@@ -43,19 +70,24 @@ function rowToProduct(r: ProductRow): Product {
 
 /**
  * The full catalog for the current request. `cache()` dedupes calls within a
- * single render pass, so multiple consumers don't each hit the DB.
+ * single render pass, so multiple consumers don't each hit the network.
  */
 export const getCatalog = cache(async (): Promise<Product[]> => {
-  if (!isDatabaseEnabled) return PRODUCTS;
-  const db = getDb();
-  if (!db) return PRODUCTS;
+  if (!isSupabaseConfigured) return PRODUCTS;
   try {
-    const rows = await db.select().from(schema.products);
-    if (rows.length === 0) return PRODUCTS; // table not seeded yet
-    return rows.map(rowToProduct);
+    const supabase = createClient(
+      env.NEXT_PUBLIC_SUPABASE_URL!,
+      env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    );
+    const { data, error } = await supabase
+      .from("products")
+      .select("*")
+      .order("created_at", { ascending: true });
+    if (error || !data || data.length === 0) return PRODUCTS;
+    return (data as ProductRecord[]).map(rowToProduct);
   } catch (err) {
-    // Never take the storefront down because the DB is unreachable.
-    console.error("Catalog DB query failed; falling back to mock:", err);
+    // Never take the storefront down because the backend is unreachable.
+    console.error("Catalog fetch failed; falling back to mock:", err);
     return PRODUCTS;
   }
 });

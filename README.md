@@ -81,11 +81,15 @@ checkout redirects to Stripe.
 > and `src/lib/db/index.ts` for the feature flags.
 
 **Catalog source.** Server code reads the catalog through
-`src/lib/data/repository.ts`: when `DATABASE_URL` is set _and_ the `products`
-table has rows, products come from Postgres; otherwise it falls back to the
-baked `catalog.json`. The fallback also covers a DB that's unreachable or not
-yet seeded, so the storefront never goes down. (Client-only lookups — wishlist,
-recently-viewed — use the baked catalog, which mirrors the seed.)
+`src/lib/data/repository.ts`: when Supabase is configured _and_ the `products`
+table has rows, products come from Supabase (read with the anon key via a
+public-read RLS policy); otherwise it falls back to the baked `catalog.json`.
+The fallback also covers a backend that's unreachable or not yet seeded, so the
+storefront never goes down. (Client-only lookups — wishlist, recently-viewed —
+use the baked catalog, which mirrors the seed.)
+
+The Drizzle schema + `npm run db:push` / `db:seed` remain available for a
+self-hosted Postgres setup via `DATABASE_URL`.
 
 ## Project layout
 
