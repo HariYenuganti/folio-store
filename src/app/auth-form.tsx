@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -28,8 +29,11 @@ export function AuthForm({ mode }: { mode: "sign-in" | "sign-up" }) {
     resolver: zodResolver(authSchema),
     defaultValues: { email: "", password: "" },
   });
+  const [notice, setNotice] = useState<string | null>(null);
 
   const onSubmit = handleSubmit(async ({ email, password }) => {
+    setNotice(null);
+
     if (!isSupabaseEnabled) {
       // Demo mode — no real auth backend. Persist a token and move on.
       sessionStorage.setItem("form-demo-user", email);
@@ -46,19 +50,40 @@ export function AuthForm({ mode }: { mode: "sign-in" | "sign-up" }) {
       return;
     }
 
-    const { error } =
-      mode === "sign-in"
-        ? await supabase.auth.signInWithPassword({ email, password })
-        : await supabase.auth.signUp({ email, password });
+    if (mode === "sign-in") {
+      const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+      if (error) {
+        setError("root", { message: error.message });
+        toast.error(error.message);
+        return;
+      }
+      toast.success("Welcome back");
+      router.push("/account");
+      router.refresh();
+      return;
+    }
 
+    // Sign up
+    const { data, error } = await supabase.auth.signUp({ email, password });
     if (error) {
       setError("root", { message: error.message });
       toast.error(error.message);
       return;
     }
-
-    toast.success(mode === "sign-in" ? "Welcome back" : "Account created");
+    if (!data.session) {
+      // Email confirmation is on — the user is created but not yet signed in.
+      setNotice(
+        `Almost there — we've emailed a confirmation link to ${email}. Click it, then sign in.`,
+      );
+      toast.success("Check your email to confirm your account.");
+      return;
+    }
+    toast.success("Account created");
     router.push("/account");
+    router.refresh();
   });
 
   return (
@@ -114,6 +139,15 @@ export function AuthForm({ mode }: { mode: "sign-in" | "sign-up" }) {
       {errors.root && (
         <p role="alert" className="text-xs text-destructive">
           {errors.root.message}
+        </p>
+      )}
+
+      {notice && (
+        <p
+          role="status"
+          className="border border-border bg-secondary/40 p-3 text-sm leading-relaxed"
+        >
+          {notice}
         </p>
       )}
 
