@@ -1,9 +1,11 @@
 # FOLIO — Modern e-commerce in Next.js 15
 
-A polished, production-leaning e-commerce storefront for a minimalist apparel
-brand. Built as a portfolio piece to showcase a modern full-stack React
-architecture: App Router, Server Components, Server Actions, Drizzle ORM,
-Supabase Auth, and Stripe Checkout.
+**Live demo → [folio-store-plum.vercel.app](https://folio-store-plum.vercel.app)**
+
+A polished, production-leaning e-commerce storefront for a curated multi-brand
+fashion edit. Built as a portfolio piece to showcase a modern full-stack React
+architecture: App Router, Server Components, TanStack Query, Drizzle ORM,
+Supabase, and Stripe Checkout.
 
 **Runs out of the box with seeded mock data.** Drop in Supabase + Stripe keys
 to flip the same storefront onto a real backend with no code changes.
