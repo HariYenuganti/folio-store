@@ -1,7 +1,7 @@
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { AccountClient } from "./account-client";
+import { SignOutButton } from "@/components/sign-out-button";
 
 export const metadata = { title: "Account" };
 
@@ -31,22 +31,20 @@ export default function AccountPage() {
               Orders
             </Link>
             <Link
-              href="#"
+              href="/account/addresses"
               className="border-l-2 border-transparent py-2 pl-4 text-muted-foreground hover:text-foreground"
             >
               Addresses
             </Link>
             <Link
-              href="#"
+              href="/wishlist"
               className="border-l-2 border-transparent py-2 pl-4 text-muted-foreground hover:text-foreground"
             >
               Wishlist
             </Link>
           </nav>
           <Separator className="my-6" />
-          <Button asChild variant="outline" size="sm" className="w-full">
-            <Link href="/sign-in">Sign out</Link>
-          </Button>
+          <SignOutButton />
         </aside>
 
         <section>
