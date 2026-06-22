@@ -2,8 +2,55 @@ import Link from "next/link";
 import { Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SuccessClear } from "./success-clear";
+import { stripe, isStripeEnabled } from "@/lib/stripe";
+import { createClient } from "@/lib/supabase/server";
 
 export const metadata = { title: "Order confirmed" };
+
+/**
+ * Records the paid order for the signed-in user, idempotently. Uses the
+ * authoritative Stripe session (amount + line items) rather than client cart
+ * state, and the server Supabase client (RLS: user can insert their own order).
+ */
+async function recordOrder(sessionId: string) {
+  if (!isStripeEnabled || !stripe) return;
+  const supabase = await createClient();
+  if (!supabase) return;
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return;
+
+  try {
+    const session = await stripe.checkout.sessions.retrieve(sessionId, {
+      expand: ["line_items"],
+    });
+    if (session.payment_status !== "paid" && session.status !== "complete")
+      return;
+
+    const items = (session.line_items?.data ?? []).map((li) => ({
+      name: li.description,
+      quantity: li.quantity ?? 1,
+      amount: li.amount_total,
+    }));
+
+    await supabase.from("orders").upsert(
+      {
+        user_id: user.id,
+        email: user.email ?? session.customer_details?.email ?? null,
+        status: "paid",
+        total: session.amount_total ?? 0,
+        items,
+        stripe_session_id: session.id,
+        shipping_address: session.customer_details?.address ?? null,
+      },
+      { onConflict: "stripe_session_id", ignoreDuplicates: true },
+    );
+  } catch {
+    // Best-effort — never block the confirmation page.
+  }
+}
 
 export default async function SuccessPage({
   searchParams,
@@ -11,6 +58,8 @@ export default async function SuccessPage({
   searchParams: Promise<{ session_id?: string; order?: string }>;
 }) {
   const sp = await searchParams;
+  if (sp.session_id) await recordOrder(sp.session_id);
+
   const orderId =
     sp.order ??
     (sp.session_id ? sp.session_id.slice(-12).toUpperCase() : "DEMO");
@@ -26,8 +75,8 @@ export default async function SuccessPage({
       </p>
       <h1 className="mt-3 font-serif text-4xl">Order confirmed</h1>
       <p className="mt-4 max-w-md text-sm text-muted-foreground">
-        We've sent a confirmation to your email. Your pieces are being prepared
-        with care and will ship within 2–3 business days.
+        We&apos;ve sent a confirmation to your email. Your pieces are being
+        prepared with care and will ship within 2–3 business days.
       </p>
       <p className="mt-6 text-xs uppercase tracking-widest text-muted-foreground">
         Order reference
