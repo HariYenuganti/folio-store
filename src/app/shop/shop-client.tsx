@@ -53,11 +53,13 @@ export function ShopClient({ products }: { products: Product[] }) {
   const [priceKey, setPriceKey] = useState<string>("all");
   const [minRating, setMinRating] = useState(0);
   const [inStockOnly, setInStockOnly] = useState(false);
+  const [brand, setBrand] = useState("all");
   const [filtersOpen, setFiltersOpen] = useState(false);
 
   const activeFilterCount =
     (category !== "all" ? 1 : 0) +
     (collection !== "all" ? 1 : 0) +
+    (brand !== "all" ? 1 : 0) +
     sizes.size +
     (priceKey !== "all" ? 1 : 0) +
     (minRating > 0 ? 1 : 0) +
@@ -74,6 +76,14 @@ export function ShopClient({ products }: { products: Product[] }) {
   // subsequent navigation/refetches are cached by React Query.
   const { data: catalog = products, isFetching } = useProducts({}, products);
 
+  const brands = useMemo(
+    () =>
+      [
+        ...new Set(catalog.map((p) => p.brand).filter(Boolean)),
+      ].sort() as string[],
+    [catalog],
+  );
+
   const toggleSize = (s: string) => {
     setSizes((prev) => {
       const next = new Set(prev);
@@ -89,6 +99,7 @@ export function ShopClient({ products }: { products: Product[] }) {
       out = out.filter(
         (p) => p.collection.toLowerCase() === collection.toLowerCase(),
       );
+    if (brand !== "all") out = out.filter((p) => p.brand === brand);
     if (sizes.size > 0)
       out = out.filter((p) => p.sizes.some((s) => sizes.has(s)));
     const priceRange = PRICE_RANGES.find((r) => r.key === priceKey);
@@ -129,6 +140,7 @@ export function ShopClient({ products }: { products: Product[] }) {
     catalog,
     category,
     collection,
+    brand,
     sizes,
     sort,
     query,
@@ -150,6 +162,7 @@ export function ShopClient({ products }: { products: Product[] }) {
     setPriceKey("all");
     setMinRating(0);
     setInStockOnly(false);
+    setBrand("all");
     router.replace(pathname, { scroll: false });
   };
 
@@ -260,6 +273,27 @@ export function ShopClient({ products }: { products: Product[] }) {
                 </li>
               ))}
             </ul>
+          </div>
+
+          <Separator />
+
+          <div>
+            <p className="text-xs uppercase tracking-widest text-muted-foreground">
+              Brand
+            </p>
+            <Select value={brand} onValueChange={setBrand}>
+              <SelectTrigger className="mt-3 w-full rounded-none">
+                <SelectValue placeholder="All brands" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All brands</SelectItem>
+                {brands.map((b) => (
+                  <SelectItem key={b} value={b}>
+                    {b}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
 
           <Separator />
