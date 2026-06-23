@@ -27,6 +27,10 @@ interface AddressRow extends Values {
   id: string;
 }
 
+// Normalized dedup key — matches the DB's addr_key (lowercased, trimmed).
+const addrKey = (a: { line1?: string; postal_code?: string }) =>
+  `${(a.line1 ?? "").trim().toLowerCase()}|${(a.postal_code ?? "").trim().toLowerCase()}`;
+
 export function AddressesClient() {
   const [loading, setLoading] = useState(true);
   const [signedIn, setSignedIn] = useState(false);
@@ -72,13 +76,35 @@ export function AddressesClient() {
   const onAdd = handleSubmit(async (values) => {
     const supabase = createClient();
     if (!supabase || !userId) return;
+
+    // Trim everything so stray whitespace doesn't create "different" addresses.
+    const trimmed = {
+      label: values.label?.trim() || undefined,
+      line1: values.line1.trim(),
+      line2: values.line2?.trim() || undefined,
+      city: values.city.trim(),
+      state: values.state?.trim() || undefined,
+      postal_code: values.postal_code.trim(),
+      country: values.country.trim(),
+    };
+
+    // Skip if the same address (normalized line1 + postal code) is already saved.
+    if (addresses.some((a) => addrKey(a) === addrKey(trimmed))) {
+      toast.error("That address is already saved");
+      return;
+    }
+
     const { data, error } = await supabase
       .from("addresses")
-      .insert({ ...values, user_id: userId })
+      .insert({ ...trimmed, user_id: userId })
       .select()
       .single();
     if (error) {
-      toast.error(error.message);
+      toast.error(
+        error.code === "23505"
+          ? "That address is already saved"
+          : error.message,
+      );
       return;
     }
     setAddresses((prev) => [data as AddressRow, ...prev]);

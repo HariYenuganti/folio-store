@@ -60,20 +60,21 @@ async function recordOrder(sessionId: string) {
       { onConflict: "stripe_session_id", ignoreDuplicates: true },
     );
 
-    // Save the shipping address to the user's address book (deduped).
+    // Save the shipping address to the user's address book (deduped on a
+    // normalized line1 + postal_code key, so it's only ever saved once).
     const addr = session.customer_details?.address;
     if (addr?.line1 && addr.city && addr.postal_code) {
       await supabase.from("addresses").upsert(
         {
           user_id: user.id,
-          line1: addr.line1,
-          line2: addr.line2 ?? null,
-          city: addr.city,
-          state: addr.state ?? null,
-          postal_code: addr.postal_code,
-          country: addr.country ?? "United States",
+          line1: addr.line1.trim(),
+          line2: addr.line2?.trim() || null,
+          city: addr.city.trim(),
+          state: addr.state?.trim() || null,
+          postal_code: addr.postal_code.trim(),
+          country: addr.country?.trim() || "United States",
         },
-        { onConflict: "user_id,line1,postal_code", ignoreDuplicates: true },
+        { onConflict: "user_id,addr_key", ignoreDuplicates: true },
       );
     }
   } catch {
