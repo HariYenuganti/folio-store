@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
@@ -14,6 +15,7 @@ import { Separator } from "@/components/ui/separator";
 import { useCart, cartSubtotal } from "@/store/cart";
 import { formatPrice } from "@/lib/utils";
 import { shippingFor } from "@/lib/shipping";
+import { createClient, isSupabaseEnabled } from "@/lib/supabase/client";
 
 const checkoutSchema = z.object({
   email: z.string().email("Enter a valid email address."),
@@ -33,11 +35,47 @@ export function CheckoutClient() {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors, isSubmitting },
   } = useForm<CheckoutValues>({
     resolver: zodResolver(checkoutSchema),
     defaultValues: { country: "United States" },
   });
+
+  // Prefill from the signed-in user + their most recent saved address, without
+  // clobbering anything they've already typed (keepDirtyValues).
+  useEffect(() => {
+    if (!isSupabaseEnabled) return;
+    const supabase = createClient();
+    if (!supabase) return;
+    (async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      if (!user) return;
+      const fullName = (user.user_metadata?.full_name as string) ?? "";
+      const [firstName, ...rest] = fullName.split(" ").filter(Boolean);
+      const { data: addrs } = await supabase
+        .from("addresses")
+        .select("line1, city, postal_code, country")
+        .order("created_at", { ascending: false })
+        .limit(1);
+      const a = addrs?.[0];
+      reset(
+        {
+          email: user.email ?? "",
+          firstName: firstName ?? "",
+          lastName: rest.join(" "),
+          address: a?.line1 ?? "",
+          city: a?.city ?? "",
+          postal: a?.postal_code ?? "",
+          country: a?.country ?? "United States",
+        },
+        { keepDirtyValues: true },
+      );
+    })();
+  }, [reset]);
+
   const subtotal = cartSubtotal(items);
   const shipping = shippingFor(subtotal);
   const total = subtotal + shipping;
