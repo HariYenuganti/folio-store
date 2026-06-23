@@ -52,8 +52,8 @@ export default async function SuccessPage({
       </p>
       <h1 className="mt-3 font-serif text-4xl">Order confirmed</h1>
       <p className="mt-4 max-w-md text-sm text-muted-foreground">
-        We&apos;ve sent a confirmation to your email. Your pieces are being
-        prepared with care and will ship within 2–3 business days.
+        Your order is confirmed and your pieces are being prepared with care,
+        typically shipping within 2–4 business days.
       </p>
       <p className="mt-6 text-xs uppercase tracking-widest text-muted-foreground">
         Order reference

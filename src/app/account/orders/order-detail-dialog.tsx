@@ -193,7 +193,7 @@ function OrderBody({
 
         {order.email && (
           <p className="mt-4 text-xs text-muted-foreground">
-            Confirmation sent to {order.email}
+            Order email: {order.email}
           </p>
         )}
       </div>
