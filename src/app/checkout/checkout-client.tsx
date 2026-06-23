@@ -13,6 +13,7 @@ import { FormField } from "@/components/ui/form-field";
 import { Separator } from "@/components/ui/separator";
 import { useCart, cartSubtotal } from "@/store/cart";
 import { formatPrice } from "@/lib/utils";
+import { shippingFor } from "@/lib/shipping";
 
 const checkoutSchema = z.object({
   email: z.string().email("Enter a valid email address."),
@@ -38,7 +39,7 @@ export function CheckoutClient() {
     defaultValues: { country: "United States" },
   });
   const subtotal = cartSubtotal(items);
-  const shipping = subtotal >= 20000 ? 0 : 1500;
+  const shipping = shippingFor(subtotal);
   const total = subtotal + shipping;
 
   if (items.length === 0) {

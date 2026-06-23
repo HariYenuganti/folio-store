@@ -7,11 +7,12 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { useCart, cartSubtotal } from "@/store/cart";
 import { formatPrice } from "@/lib/utils";
+import { shippingFor } from "@/lib/shipping";
 
 export function CartPageClient() {
   const { items, setQuantity, remove } = useCart();
   const subtotal = cartSubtotal(items);
-  const shipping = subtotal >= 20000 ? 0 : 1500;
+  const shipping = shippingFor(subtotal);
   const total = subtotal + shipping;
 
   if (items.length === 0) {

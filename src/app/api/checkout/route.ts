@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { stripe, isStripeEnabled, getAppUrl } from "@/lib/stripe";
 import { createClient } from "@/lib/supabase/server";
+import { shippingFor } from "@/lib/shipping";
 import type { CartItem } from "@/types";
 
 const Body = z.object({
@@ -61,10 +62,10 @@ export async function POST(req: Request) {
       // Not signed in / Supabase unavailable — proceed as a guest checkout.
     }
 
-    // Mirror the UI's shipping rule (free over $200, else $15) so the amount
-    // Stripe charges matches the total shown at checkout.
+    // Mirror the UI's shipping rule (shared constant) so the amount Stripe
+    // charges matches the total shown at checkout.
     const subtotal = items.reduce((sum, i) => sum + i.price * i.quantity, 0);
-    const shippingAmount = subtotal >= 20000 ? 0 : 1500;
+    const shippingAmount = shippingFor(subtotal);
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
       payment_method_types: ["card"],
