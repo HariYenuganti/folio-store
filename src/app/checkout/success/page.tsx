@@ -59,6 +59,23 @@ async function recordOrder(sessionId: string) {
       },
       { onConflict: "stripe_session_id", ignoreDuplicates: true },
     );
+
+    // Save the shipping address to the user's address book (deduped).
+    const addr = session.customer_details?.address;
+    if (addr?.line1 && addr.city && addr.postal_code) {
+      await supabase.from("addresses").upsert(
+        {
+          user_id: user.id,
+          line1: addr.line1,
+          line2: addr.line2 ?? null,
+          city: addr.city,
+          state: addr.state ?? null,
+          postal_code: addr.postal_code,
+          country: addr.country ?? "United States",
+        },
+        { onConflict: "user_id,line1,postal_code", ignoreDuplicates: true },
+      );
+    }
   } catch {
     // Best-effort — never block the confirmation page.
   }

@@ -72,7 +72,7 @@ export function AccountClient() {
           </p>
         </Link>
         <Link
-          href="/wishlist"
+          href="/account/wishlist"
           className="border border-border p-6 hover:bg-accent"
         >
           <p className="text-xs uppercase tracking-widest text-muted-foreground">
