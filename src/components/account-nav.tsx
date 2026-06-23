@@ -1,10 +1,12 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Separator } from "@/components/ui/separator";
 import { SignOutButton } from "@/components/sign-out-button";
 import { cn } from "@/lib/utils";
+import { createClient, isSupabaseEnabled } from "@/lib/supabase/client";
 
 const LINKS = [
   { href: "/account", label: "Profile" },
@@ -15,6 +17,21 @@ const LINKS = [
 
 export function AccountNav() {
   const pathname = usePathname();
+  const [signedIn, setSignedIn] = useState(false);
+
+  useEffect(() => {
+    if (!isSupabaseEnabled) {
+      setSignedIn(!!sessionStorage.getItem("form-demo-user"));
+      return;
+    }
+    const supabase = createClient();
+    if (!supabase) return;
+    supabase.auth.getUser().then(({ data }) => setSignedIn(!!data.user));
+    const { data: sub } = supabase.auth.onAuthStateChange((_event, session) =>
+      setSignedIn(!!session?.user),
+    );
+    return () => sub.subscription.unsubscribe();
+  }, []);
 
   return (
     <aside>
@@ -41,8 +58,12 @@ export function AccountNav() {
           );
         })}
       </nav>
-      <Separator className="my-6" />
-      <SignOutButton />
+      {signedIn && (
+        <>
+          <Separator className="my-6" />
+          <SignOutButton />
+        </>
+      )}
     </aside>
   );
 }
