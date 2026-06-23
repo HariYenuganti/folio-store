@@ -2,18 +2,17 @@ import Link from "next/link";
 import { Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SuccessClear } from "./success-clear";
-import { stripe, isStripeEnabled } from "@/lib/stripe";
 import { createClient } from "@/lib/supabase/server";
+import { retrievePaidSession, persistOrderFromSession } from "@/lib/orders";
 
 export const metadata = { title: "Order confirmed" };
 
 /**
- * Records the paid order for the signed-in user, idempotently. Uses the
- * authoritative Stripe session (amount + line items) rather than client cart
- * state, and the server Supabase client (RLS: user can insert their own order).
+ * Records the paid order for the signed-in user as soon as they land here, so it
+ * shows up instantly. The Stripe webhook records it too (covering closed tabs /
+ * guests); both share persistOrderFromSession and are idempotent.
  */
 async function recordOrder(sessionId: string) {
-  if (!isStripeEnabled || !stripe) return;
   const supabase = await createClient();
   if (!supabase) return;
 
@@ -23,60 +22,8 @@ async function recordOrder(sessionId: string) {
   if (!user) return;
 
   try {
-    const session = await stripe.checkout.sessions.retrieve(sessionId, {
-      expand: ["line_items.data.price.product"],
-    });
-    if (session.payment_status !== "paid" && session.status !== "complete")
-      return;
-
-    const items = (session.line_items?.data ?? []).map((li) => {
-      const product = li.price?.product;
-      const prod =
-        product && typeof product === "object" && !("deleted" in product)
-          ? product
-          : null;
-      const meta = prod?.metadata ?? {};
-      return {
-        name: meta.name ?? prod?.name ?? li.description,
-        slug: meta.slug ?? null,
-        size: meta.size ?? null,
-        color: meta.color ?? null,
-        image: prod?.images?.[0] ?? null,
-        quantity: li.quantity ?? 1,
-        amount: li.amount_total,
-      };
-    });
-
-    await supabase.from("orders").upsert(
-      {
-        user_id: user.id,
-        email: user.email ?? session.customer_details?.email ?? null,
-        status: "paid",
-        total: session.amount_total ?? 0,
-        items,
-        stripe_session_id: session.id,
-        shipping_address: session.customer_details?.address ?? null,
-      },
-      { onConflict: "stripe_session_id", ignoreDuplicates: true },
-    );
-
-    // Save the shipping address to the user's address book (deduped on a
-    // normalized line1 + postal_code key, so it's only ever saved once).
-    const addr = session.customer_details?.address;
-    if (addr?.line1 && addr.city && addr.postal_code) {
-      await supabase.from("addresses").upsert(
-        {
-          user_id: user.id,
-          line1: addr.line1.trim(),
-          line2: addr.line2?.trim() || null,
-          city: addr.city.trim(),
-          state: addr.state?.trim() || null,
-          postal_code: addr.postal_code.trim(),
-          country: addr.country?.trim() || "United States",
-        },
-        { onConflict: "user_id,addr_key", ignoreDuplicates: true },
-      );
-    }
+    const session = await retrievePaidSession(sessionId);
+    if (session) await persistOrderFromSession(supabase, session, user.id);
   } catch {
     // Best-effort — never block the confirmation page.
   }

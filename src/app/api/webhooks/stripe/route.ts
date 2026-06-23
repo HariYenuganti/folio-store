@@ -1,10 +1,14 @@
 import { NextResponse } from "next/server";
 import { stripe, isStripeEnabled } from "@/lib/stripe";
+import { createAdminClient } from "@/lib/supabase/admin";
+import { retrievePaidSession, persistOrderFromSession } from "@/lib/orders";
 import type Stripe from "stripe";
 
 /**
- * Stripe webhook handler. In production you'd persist order state here using
- * the secret signing key. Left as a clear stub for the portfolio.
+ * Stripe webhook handler. Persists paid orders authoritatively — independent of
+ * whether the buyer ever reaches the success page (closed tab, guest checkout).
+ * Uses the service-role client to write past RLS, and is idempotent via the
+ * unique constraint on stripe_session_id.
  */
 export async function POST(req: Request) {
   if (!isStripeEnabled || !stripe) {
@@ -30,14 +34,28 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: msg }, { status: 400 });
   }
 
-  switch (event.type) {
-    case "checkout.session.completed": {
-      // const session = event.data.object as Stripe.Checkout.Session;
-      // TODO: persist order to DB using `session.id`, `customer_details`, etc.
-      break;
+  if (event.type === "checkout.session.completed") {
+    const session = event.data.object as Stripe.Checkout.Session;
+    const db = createAdminClient();
+    if (db) {
+      try {
+        // Re-fetch with line items expanded; ignore if not actually paid.
+        const full = await retrievePaidSession(session.id);
+        if (full) {
+          await persistOrderFromSession(
+            db,
+            full,
+            full.client_reference_id ?? null,
+          );
+        }
+      } catch (err) {
+        // Return 500 so Stripe retries (the upsert is idempotent, so retrying
+        // a transient failure is safe).
+        console.error("[stripe webhook] failed to persist order", err);
+        return NextResponse.json({ error: "persist failed" }, { status: 500 });
+      }
     }
-    default:
-      break;
   }
+
   return NextResponse.json({ received: true });
 }

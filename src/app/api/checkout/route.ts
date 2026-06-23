@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { stripe, isStripeEnabled, getAppUrl } from "@/lib/stripe";
+import { createClient } from "@/lib/supabase/server";
 import type { CartItem } from "@/types";
 
 const Body = z.object({
@@ -44,6 +45,22 @@ export async function POST(req: Request) {
 
   try {
     const appUrl = getAppUrl();
+
+    // Tag the session with the signed-in user's id so the webhook can attribute
+    // the order even if the buyer never lands on the success page.
+    let userId: string | undefined;
+    try {
+      const supabase = await createClient();
+      if (supabase) {
+        const {
+          data: { user },
+        } = await supabase.auth.getUser();
+        userId = user?.id;
+      }
+    } catch {
+      // Not signed in / Supabase unavailable — proceed as a guest checkout.
+    }
+
     // Mirror the UI's shipping rule (free over $200, else $15) so the amount
     // Stripe charges matches the total shown at checkout.
     const subtotal = items.reduce((sum, i) => sum + i.price * i.quantity, 0);
@@ -52,6 +69,7 @@ export async function POST(req: Request) {
       mode: "payment",
       payment_method_types: ["card"],
       customer_email: email ?? undefined,
+      client_reference_id: userId,
       line_items: items.map((i) => ({
         quantity: i.quantity,
         price_data: {
