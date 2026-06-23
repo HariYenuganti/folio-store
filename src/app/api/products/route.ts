@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getCatalog } from "@/lib/data/repository";
+import { searchProducts } from "@/lib/search";
 
 /**
  * Product catalog endpoint consumed by TanStack Query on the client.
@@ -10,7 +11,7 @@ export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
   const category = searchParams.get("category");
   const collection = searchParams.get("collection");
-  const q = searchParams.get("q")?.trim().toLowerCase();
+  const q = searchParams.get("q")?.trim();
 
   let products = await getCatalog();
   if (category) products = products.filter((p) => p.category === category);
@@ -18,15 +19,7 @@ export async function GET(req: Request) {
     products = products.filter(
       (p) => p.collection.toLowerCase() === collection.toLowerCase(),
     );
-  if (q) {
-    products = products.filter(
-      (p) =>
-        p.name.toLowerCase().includes(q) ||
-        p.brand?.toLowerCase().includes(q) ||
-        p.category.toLowerCase().includes(q) ||
-        p.tags.some((t) => t.toLowerCase().includes(q)),
-    );
-  }
+  if (q) products = searchProducts(products, q);
 
   return NextResponse.json({ products });
 }

@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { CATEGORIES, COLLECTIONS } from "@/lib/data/products";
+import { searchProducts } from "@/lib/search";
 import { cn } from "@/lib/utils";
 import type { Product, Size } from "@/types";
 
@@ -112,16 +113,7 @@ export function ShopClient({ products }: { products: Product[] }) {
       );
     if (minRating > 0) out = out.filter((p) => (p.rating ?? 0) >= minRating);
     if (inStockOnly) out = out.filter((p) => p.inStock);
-    if (query) {
-      const qq = query.toLowerCase();
-      out = out.filter(
-        (p) =>
-          p.name.toLowerCase().includes(qq) ||
-          p.brand?.toLowerCase().includes(qq) ||
-          p.category.toLowerCase().includes(qq) ||
-          p.tags.some((t) => t.toLowerCase().includes(qq)),
-      );
-    }
+    if (query) out = searchProducts(out, query);
     switch (sort) {
       case "price-asc":
         out.sort((a, b) => a.price - b.price);
