@@ -9,6 +9,7 @@ import type { Product } from "@/types";
 
 export function ProductCard({ product }: { product: Product }) {
   const onSale = !!product.compareAtPrice;
+  const soldOut = product.inStock === false || product.stock === 0;
   const href = `/shop/${product.slug}`;
 
   return (
@@ -41,8 +42,11 @@ export function ProductCard({ product }: { product: Product }) {
         </Link>
 
         <div className="pointer-events-none absolute left-3 top-3 flex flex-col gap-1">
-          {product.newArrival && <Badge variant="outline">New</Badge>}
-          {onSale && <Badge variant="sale">Sale</Badge>}
+          {soldOut && <Badge variant="default">Sold out</Badge>}
+          {product.newArrival && !soldOut && (
+            <Badge variant="outline">New</Badge>
+          )}
+          {onSale && !soldOut && <Badge variant="sale">Sale</Badge>}
         </div>
 
         <WishlistButton

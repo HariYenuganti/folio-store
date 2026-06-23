@@ -23,8 +23,13 @@ export function QuickView({ product }: { product: Product }) {
   const [color, setColor] = useState(product.colors[0]?.name ?? "");
   const add = useCart((s) => s.add);
   const onSale = !!product.compareAtPrice;
+  const soldOut = product.inStock === false || product.stock === 0;
 
   const handleAdd = () => {
+    if (soldOut) {
+      toast.error("This item is out of stock.");
+      return;
+    }
     if (!size) {
       toast.error("Please select a size.");
       return;
@@ -141,9 +146,19 @@ export function QuickView({ product }: { product: Product }) {
             </div>
 
             <div className="mt-6 flex gap-2">
-              <Button onClick={handleAdd} className="flex-1 rounded-none">
-                <ShoppingBag className="h-4 w-4" />
-                Add to bag
+              <Button
+                onClick={handleAdd}
+                disabled={soldOut}
+                className="flex-1 rounded-none"
+              >
+                {soldOut ? (
+                  "Sold out"
+                ) : (
+                  <>
+                    <ShoppingBag className="h-4 w-4" />
+                    Add to bag
+                  </>
+                )}
               </Button>
               <WishlistButton
                 slug={product.slug}
