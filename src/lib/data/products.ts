@@ -62,17 +62,6 @@ export function getProductBySlug(
   return list.find((p) => p.slug === slug);
 }
 
-export function getProductsByCategory(
-  category: string,
-  list: Product[] = PRODUCTS,
-): Product[] {
-  return list.filter((p) => p.category === category);
-}
-
-export function getFeaturedProducts(list: Product[] = PRODUCTS): Product[] {
-  return list.filter((p) => p.featured);
-}
-
 /**
  * A diversified "edit" — the highest-rated product from each category first,
  * then the next-best overall to fill the row. Keeps the home feature grid from

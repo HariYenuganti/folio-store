@@ -24,9 +24,3 @@ export function slugify(input: string) {
 export function truncate(input: string, max: number) {
   return input.length > max ? input.slice(0, max - 1) + "…" : input;
 }
-
-export function range(from: number, to: number) {
-  const out: number[] = [];
-  for (let i = from; i <= to; i++) out.push(i);
-  return out;
-}

@@ -29,7 +29,7 @@ to flip the same storefront onto a real backend with no code changes.
 | Data fetching | **TanStack Query (React Query) v5** — cached client fetching + SSR hydration |
 | State         | Zustand (cart, persisted to localStorage)                                    |
 | Validation    | Zod                                                                          |
-| UX            | next-themes (light/dark), Sonner (toasts), Lucide icons, Framer Motion       |
+| UX            | next-themes (light/dark), Sonner (toasts), Lucide icons                      |
 
 ## What's inside
 
