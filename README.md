@@ -1,4 +1,4 @@
-# FOLIO — Modern e-commerce in Next.js 15
+# FOLIO — Modern e-commerce in Next.js 16
 
 **Live demo → [folio-store-plum.vercel.app](https://folio-store-plum.vercel.app)**
 
@@ -10,11 +10,17 @@ Supabase, and Stripe Checkout.
 **Runs out of the box with seeded mock data.** Drop in Supabase + Stripe keys
 to flip the same storefront onto a real backend with no code changes.
 
+![FOLIO home](docs/screenshots/home.png)
+
+| Shop / PLP                         | Product detail                                  |
+| ---------------------------------- | ----------------------------------------------- |
+| ![Shop](docs/screenshots/shop.png) | ![Product detail](docs/screenshots/product.png) |
+
 ## Stack
 
 | Layer         | Tech                                                                         |
 | ------------- | ---------------------------------------------------------------------------- |
-| Framework     | **Next.js 15** App Router, React 19, Server Components                       |
+| Framework     | **Next.js 16** App Router, React 19, Server Components                       |
 | Language      | TypeScript 5, strict mode                                                    |
 | Styling       | Tailwind CSS 3 + CSS variables, shadcn-style primitives, Radix UI            |
 | Database      | **Drizzle ORM** over Postgres (Supabase or any Postgres)                     |
