@@ -1,9 +1,9 @@
 import { notFound } from "next/navigation";
-import Link from "next/link";
 import { getProductBySlug, getRelatedProducts } from "@/lib/data/products";
 import { getCatalog } from "@/lib/data/repository";
 import { ProductDetail } from "./product-detail";
 import { ProductGrid } from "@/components/product-grid";
+import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { RecordView } from "@/components/record-view";
 import { RecentlyViewed } from "@/components/recently-viewed";
 
@@ -75,16 +75,20 @@ export default async function ProductPage({
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <RecordView slug={product.slug} />
-      <div className="container py-4 text-xs uppercase tracking-widest text-muted-foreground">
-        <Link href="/" className="hover:text-foreground">
-          Home
-        </Link>
-        <span className="mx-2">/</span>
-        <Link href="/shop" className="hover:text-foreground">
-          Shop
-        </Link>
-        <span className="mx-2">/</span>
-        <span className="text-foreground">{product.name}</span>
+      <div className="container py-4">
+        <Breadcrumb
+          items={[
+            { label: "Home", href: "/" },
+            { label: "Shop", href: "/shop" },
+            {
+              label:
+                product.category.charAt(0).toUpperCase() +
+                product.category.slice(1),
+              href: `/shop?category=${product.category}`,
+            },
+            { label: product.name },
+          ]}
+        />
       </div>
 
       <ProductDetail product={product} />
