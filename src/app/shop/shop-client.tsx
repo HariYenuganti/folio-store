@@ -433,7 +433,7 @@ export function ShopClient({ products }: { products: Product[] }) {
               </SelectContent>
             </Select>
           </div>
-          <ProductGrid products={filtered} />
+          <ProductGrid products={filtered} query={query} />
         </div>
       </div>
     </div>

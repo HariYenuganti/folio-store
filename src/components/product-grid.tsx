@@ -1,12 +1,20 @@
 import { ProductCard } from "@/components/product-card";
 import type { Product } from "@/types";
 
-export function ProductGrid({ products }: { products: Product[] }) {
+export function ProductGrid({
+  products,
+  query,
+}: {
+  products: Product[];
+  query?: string;
+}) {
   if (products.length === 0) {
     return (
-      <div className="flex min-h-[40vh] items-center justify-center">
+      <div className="flex min-h-[40vh] items-center justify-center px-4 text-center">
         <p className="text-sm text-muted-foreground">
-          No products match your filters.
+          {query
+            ? `No results for “${query}”. Try a different search or adjusting your filters.`
+            : "No products match your filters."}
         </p>
       </div>
     );
