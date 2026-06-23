@@ -1,7 +1,24 @@
 import type { ReactNode } from "react";
+import { redirect } from "next/navigation";
+import { isSupabaseConfigured } from "@/lib/env";
+import { createClient } from "@/lib/supabase/server";
 import { AccountNav } from "@/components/account-nav";
 
-export default function AccountLayout({ children }: { children: ReactNode }) {
+export default async function AccountLayout({
+  children,
+}: {
+  children: ReactNode;
+}) {
+  // Server-side guard: signed-out users never reach account pages (no client
+  // flash). Skipped in mock mode, where "auth" is client-only sessionStorage.
+  if (isSupabaseConfigured) {
+    const supabase = await createClient();
+    const {
+      data: { user },
+    } = (await supabase?.auth.getUser()) ?? { data: { user: null } };
+    if (!user) redirect("/sign-in");
+  }
+
   return (
     <div className="container py-12">
       <div className="mb-10">
