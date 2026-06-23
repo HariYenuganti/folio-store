@@ -74,15 +74,24 @@ NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_...
 STRIPE_WEBHOOK_SECRET=whsec_...    # for /api/webhooks/stripe
 ```
 
-Then push the schema and seed the catalog:
+Then create the schema and seed the catalog. The SQL in
+[`supabase/migrations/`](supabase/migrations) is the source of truth — it
+creates the `products`, `orders` and `addresses` tables **with their RLS
+policies and constraints** (owner-scoped orders/addresses, public-read
+products, normalized address dedup). Apply it with the Supabase CLI
+(`supabase db push`) or by pasting the files into the Supabase SQL editor in
+order, then seed:
 
 ```bash
-npm run db:push
 npm run db:seed
 ```
 
 Restart `npm run dev`. The app now uses real Postgres + Supabase Auth, and
 checkout redirects to Stripe.
+
+> `npm run db:push` (Drizzle) is also available for a self-hosted Postgres
+> setup via `DATABASE_URL`, but it pushes tables only — apply the SQL
+> migrations for the RLS policies.
 
 > The wiring is gated entirely on env-var presence — no code changes needed
 > to switch between modes. See `src/lib/stripe.ts`, `src/lib/supabase/*`,
@@ -95,9 +104,6 @@ public-read RLS policy); otherwise it falls back to the baked `catalog.json`.
 The fallback also covers a backend that's unreachable or not yet seeded, so the
 storefront never goes down. (Client-only lookups — wishlist, recently-viewed —
 use the baked catalog, which mirrors the seed.)
-
-The Drizzle schema + `npm run db:push` / `db:seed` remain available for a
-self-hosted Postgres setup via `DATABASE_URL`.
 
 ## Project layout
 
