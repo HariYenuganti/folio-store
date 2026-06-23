@@ -32,8 +32,14 @@ export function ProductDetail({ product }: { product: Product }) {
   const add = useCart((s) => s.add);
 
   const onSale = !!product.compareAtPrice;
+  const maxQty = product.stock ?? Infinity;
+  const soldOut = product.inStock === false || maxQty === 0;
 
   const handleAdd = () => {
+    if (soldOut) {
+      toast.error("This item is out of stock.");
+      return;
+    }
     if (!size) {
       toast.error("Please select a size.");
       return;
@@ -229,7 +235,8 @@ export function ProductDetail({ product }: { product: Product }) {
             <button
               aria-label="Decrease"
               onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-              className="flex h-full w-12 items-center justify-center hover:bg-accent"
+              disabled={soldOut}
+              className="flex h-full w-12 items-center justify-center hover:bg-accent disabled:pointer-events-none disabled:opacity-40"
             >
               <Minus className="h-4 w-4" />
             </button>
@@ -238,15 +245,27 @@ export function ProductDetail({ product }: { product: Product }) {
             </span>
             <button
               aria-label="Increase"
-              onClick={() => setQuantity((q) => q + 1)}
-              className="flex h-full w-12 items-center justify-center hover:bg-accent"
+              onClick={() => setQuantity((q) => Math.min(maxQty, q + 1))}
+              disabled={soldOut || quantity >= maxQty}
+              className="flex h-full w-12 items-center justify-center hover:bg-accent disabled:pointer-events-none disabled:opacity-40"
             >
               <Plus className="h-4 w-4" />
             </button>
           </div>
-          <Button size="lg" className="flex-1 rounded-none" onClick={handleAdd}>
-            <ShoppingBag className="h-4 w-4" />
-            Add to bag · {formatPrice(product.price * quantity)}
+          <Button
+            size="lg"
+            className="flex-1 rounded-none"
+            onClick={handleAdd}
+            disabled={soldOut}
+          >
+            {soldOut ? (
+              "Sold out"
+            ) : (
+              <>
+                <ShoppingBag className="h-4 w-4" />
+                Add to bag · {formatPrice(product.price * quantity)}
+              </>
+            )}
           </Button>
           <WishlistButton
             slug={product.slug}
