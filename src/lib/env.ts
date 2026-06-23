@@ -21,6 +21,9 @@ const schema = z.object({
   STRIPE_SECRET_KEY: z.string().optional(),
   NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: z.string().optional(),
   STRIPE_WEBHOOK_SECRET: z.string().optional(),
+  // Set to "true" to show "Continue with Google". Requires the Google provider
+  // to be enabled in the Supabase dashboard.
+  NEXT_PUBLIC_OAUTH_GOOGLE: z.string().optional(),
   // App
   NEXT_PUBLIC_APP_URL: optionalUrl,
 });
@@ -35,6 +38,7 @@ const parsed = schema.safeParse({
   NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY:
     process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,
   STRIPE_WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET,
+  NEXT_PUBLIC_OAUTH_GOOGLE: process.env.NEXT_PUBLIC_OAUTH_GOOGLE,
   NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
 });
 
@@ -54,5 +58,6 @@ export const isSupabaseConfigured = Boolean(
 );
 export const isStripeConfigured = Boolean(env.STRIPE_SECRET_KEY);
 export const isDatabaseConfigured = Boolean(env.DATABASE_URL);
+export const isGoogleOAuthEnabled = env.NEXT_PUBLIC_OAUTH_GOOGLE === "true";
 
 export const appUrl = env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
