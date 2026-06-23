@@ -7,7 +7,9 @@ import {
   timestamp,
   jsonb,
   uuid,
+  unique,
 } from "drizzle-orm/pg-core";
+import { sql } from "drizzle-orm";
 
 type ReviewRow = {
   rating: number;
@@ -56,10 +58,34 @@ export const orders = pgTable("orders", {
   status: text("status").notNull().default("pending"),
   total: integer("total").notNull(),
   items: jsonb("items").$type<unknown[]>().notNull().default([]),
-  stripeSessionId: text("stripe_session_id"),
+  stripeSessionId: text("stripe_session_id").unique(
+    "orders_stripe_session_unique",
+  ),
   shippingAddress: jsonb("shipping_address"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
+export const addresses = pgTable(
+  "addresses",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    userId: uuid("user_id").notNull(),
+    label: text("label"),
+    line1: text("line1").notNull(),
+    line2: text("line2"),
+    city: text("city").notNull(),
+    state: text("state"),
+    postalCode: text("postal_code").notNull(),
+    country: text("country").notNull().default("United States"),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    // Normalized dedup key (lowercased + trimmed line1 + postal_code).
+    addrKey: text("addr_key").generatedAlwaysAs(
+      sql`lower(btrim(line1)) || '|' || lower(btrim(coalesce(postal_code, '')))`,
+    ),
+  },
+  (t) => [unique("addresses_user_addrkey_unique").on(t.userId, t.addrKey)],
+);
+
 export type ProductRow = typeof products.$inferSelect;
 export type OrderRow = typeof orders.$inferSelect;
+export type AddressRow = typeof addresses.$inferSelect;
