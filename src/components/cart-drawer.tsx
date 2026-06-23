@@ -123,7 +123,7 @@ export function CartDrawer() {
                 <span className="tabular-nums">{formatPrice(subtotal)}</span>
               </div>
               <p className="mt-1 text-xs text-muted-foreground">
-                Shipping & taxes calculated at checkout.
+                Shipping calculated at checkout.
               </p>
               <Separator className="my-4" />
               <div className="flex flex-col gap-2">
