@@ -24,6 +24,8 @@ const schema = z.object({
   // Set to "true" to show "Continue with Google". Requires the Google provider
   // to be enabled in the Supabase dashboard.
   NEXT_PUBLIC_OAUTH_GOOGLE: z.string().optional(),
+  // Comma-separated admin emails granted access to /admin (server-only).
+  ADMIN_EMAILS: z.string().optional(),
   // App
   NEXT_PUBLIC_APP_URL: optionalUrl,
 });
@@ -39,6 +41,7 @@ const parsed = schema.safeParse({
     process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,
   STRIPE_WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET,
   NEXT_PUBLIC_OAUTH_GOOGLE: process.env.NEXT_PUBLIC_OAUTH_GOOGLE,
+  ADMIN_EMAILS: process.env.ADMIN_EMAILS,
   NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
 });
 
@@ -61,3 +64,13 @@ export const isDatabaseConfigured = Boolean(env.DATABASE_URL);
 export const isGoogleOAuthEnabled = env.NEXT_PUBLIC_OAUTH_GOOGLE === "true";
 
 export const appUrl = env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+
+const adminEmails = (env.ADMIN_EMAILS ?? "")
+  .split(",")
+  .map((e) => e.trim().toLowerCase())
+  .filter(Boolean);
+
+/** Whether an email is on the server-side admin allowlist (for /admin). */
+export function isAdminEmail(email?: string | null): boolean {
+  return !!email && adminEmails.includes(email.toLowerCase());
+}
