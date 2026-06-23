@@ -13,14 +13,42 @@ import {
   getNewArrivals,
 } from "@/lib/data/products";
 import { getCatalog } from "@/lib/data/repository";
+import { appUrl } from "@/lib/env";
 
 export default async function HomePage() {
   const catalog = await getCatalog();
   const featured = getEditPicks(8, catalog);
   const newArrivals = getNewArrivals(catalog).slice(0, 8);
 
+  // Organization + WebSite structured data (the PDP carries Product schema).
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        name: "FOLIO",
+        url: appUrl,
+        logo: `${appUrl}/icon.svg`,
+      },
+      {
+        "@type": "WebSite",
+        name: "FOLIO",
+        url: appUrl,
+        potentialAction: {
+          "@type": "SearchAction",
+          target: `${appUrl}/shop?q={search_term_string}`,
+          "query-input": "required name=search_term_string",
+        },
+      },
+    ],
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       {/* HERO */}
       <section className="relative h-[78vh] min-h-[560px] w-full overflow-hidden bg-muted">
         <Image
