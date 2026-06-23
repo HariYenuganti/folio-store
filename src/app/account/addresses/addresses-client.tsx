@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { toast } from "sonner";
-import { Trash2, Plus } from "lucide-react";
+import { Trash2, Plus, Pencil } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { FormField } from "@/components/ui/form-field";
 import { createClient } from "@/lib/supabase/client";
@@ -37,6 +37,7 @@ export function AddressesClient() {
   const [userId, setUserId] = useState<string | null>(null);
   const [addresses, setAddresses] = useState<AddressRow[]>([]);
   const [adding, setAdding] = useState(false);
+  const [editingId, setEditingId] = useState<string | null>(null);
 
   const {
     register,
@@ -73,44 +74,89 @@ export function AddressesClient() {
     })();
   }, []);
 
-  const onAdd = handleSubmit(async (values) => {
+  const startAdd = () => {
+    setEditingId(null);
+    reset({ country: "United States" });
+    setAdding(true);
+  };
+
+  const startEdit = (a: AddressRow) => {
+    setEditingId(a.id);
+    reset({
+      label: a.label ?? "",
+      line1: a.line1 ?? "",
+      line2: a.line2 ?? "",
+      city: a.city ?? "",
+      state: a.state ?? "",
+      postal_code: a.postal_code ?? "",
+      country: a.country ?? "United States",
+    });
+    setAdding(true);
+  };
+
+  const cancelForm = () => {
+    reset({ country: "United States" });
+    setEditingId(null);
+    setAdding(false);
+  };
+
+  const onSubmit = handleSubmit(async (values) => {
     const supabase = createClient();
     if (!supabase || !userId) return;
 
-    // Trim everything so stray whitespace doesn't create "different" addresses.
+    // Trim everything; clear emptied optionals (null) so edits can remove them.
     const trimmed = {
-      label: values.label?.trim() || undefined,
+      label: values.label?.trim() || null,
       line1: values.line1.trim(),
-      line2: values.line2?.trim() || undefined,
+      line2: values.line2?.trim() || null,
       city: values.city.trim(),
-      state: values.state?.trim() || undefined,
+      state: values.state?.trim() || null,
       postal_code: values.postal_code.trim(),
       country: values.country.trim(),
     };
 
-    // Skip if the same address (normalized line1 + postal code) is already saved.
-    if (addresses.some((a) => addrKey(a) === addrKey(trimmed))) {
+    // Block a normalized duplicate of a *different* saved address.
+    if (
+      addresses.some(
+        (a) => a.id !== editingId && addrKey(a) === addrKey(trimmed),
+      )
+    ) {
       toast.error("That address is already saved");
       return;
     }
 
-    const { data, error } = await supabase
-      .from("addresses")
-      .insert({ ...trimmed, user_id: userId })
-      .select()
-      .single();
-    if (error) {
-      toast.error(
-        error.code === "23505"
-          ? "That address is already saved"
-          : error.message,
+    const dupMessage = (msg: string) =>
+      toast.error(msg === "23505" ? "That address is already saved" : msg);
+
+    if (editingId) {
+      const { data, error } = await supabase
+        .from("addresses")
+        .update(trimmed)
+        .eq("id", editingId)
+        .select()
+        .single();
+      if (error) {
+        dupMessage(error.code === "23505" ? "23505" : error.message);
+        return;
+      }
+      setAddresses((prev) =>
+        prev.map((a) => (a.id === editingId ? (data as AddressRow) : a)),
       );
-      return;
+      toast.success("Address updated");
+    } else {
+      const { data, error } = await supabase
+        .from("addresses")
+        .insert({ ...trimmed, user_id: userId })
+        .select()
+        .single();
+      if (error) {
+        dupMessage(error.code === "23505" ? "23505" : error.message);
+        return;
+      }
+      setAddresses((prev) => [data as AddressRow, ...prev]);
+      toast.success("Address saved");
     }
-    setAddresses((prev) => [data as AddressRow, ...prev]);
-    toast.success("Address saved");
-    reset({ country: "United States" });
-    setAdding(false);
+    cancelForm();
   });
 
   const onDelete = async (id: string) => {
@@ -160,13 +206,22 @@ export function AddressesClient() {
               key={a.id}
               className="relative border border-border p-5 text-sm"
             >
-              <button
-                onClick={() => onDelete(a.id)}
-                aria-label="Remove address"
-                className="absolute right-3 top-3 text-muted-foreground transition-colors hover:text-destructive"
-              >
-                <Trash2 className="h-4 w-4" />
-              </button>
+              <div className="absolute right-3 top-3 flex gap-2">
+                <button
+                  onClick={() => startEdit(a)}
+                  aria-label="Edit address"
+                  className="text-muted-foreground transition-colors hover:text-foreground"
+                >
+                  <Pencil className="h-4 w-4" />
+                </button>
+                <button
+                  onClick={() => onDelete(a.id)}
+                  aria-label="Remove address"
+                  className="text-muted-foreground transition-colors hover:text-destructive"
+                >
+                  <Trash2 className="h-4 w-4" />
+                </button>
+              </div>
               {a.label && (
                 <p className="mb-1 text-xs uppercase tracking-widest text-muted-foreground">
                   {a.label}
@@ -187,12 +242,12 @@ export function AddressesClient() {
 
       {adding ? (
         <form
-          onSubmit={onAdd}
+          onSubmit={onSubmit}
           noValidate
           className="space-y-4 border border-border p-6"
         >
           <p className="text-xs uppercase tracking-widest text-muted-foreground">
-            New address
+            {editingId ? "Edit address" : "New address"}
           </p>
           <FormField
             id="label"
@@ -248,27 +303,24 @@ export function AddressesClient() {
               className="rounded-none"
               disabled={isSubmitting}
             >
-              {isSubmitting ? "Saving…" : "Save address"}
+              {isSubmitting
+                ? "Saving…"
+                : editingId
+                  ? "Save changes"
+                  : "Save address"}
             </Button>
             <Button
               type="button"
               variant="outline"
               className="rounded-none"
-              onClick={() => {
-                reset({ country: "United States" });
-                setAdding(false);
-              }}
+              onClick={cancelForm}
             >
               Cancel
             </Button>
           </div>
         </form>
       ) : (
-        <Button
-          variant="outline"
-          className="rounded-none"
-          onClick={() => setAdding(true)}
-        >
+        <Button variant="outline" className="rounded-none" onClick={startAdd}>
           <Plus className="h-4 w-4" />
           Add address
         </Button>
