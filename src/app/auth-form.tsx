@@ -67,7 +67,11 @@ export function AuthForm({ mode }: { mode: "sign-in" | "sign-up" }) {
     }
 
     // Sign up
-    const { data, error } = await supabase.auth.signUp({ email, password });
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: { emailRedirectTo: `${window.location.origin}/auth/callback` },
+    });
     if (error) {
       setError("root", { message: error.message });
       toast.error(error.message);
