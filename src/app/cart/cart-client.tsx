@@ -149,7 +149,10 @@ export function CartPageClient() {
           <Button asChild size="lg" className="mt-6 w-full rounded-none">
             <Link href="/checkout">Checkout</Link>
           </Button>
-          <p className="mt-3 text-center text-[10px] uppercase tracking-widest text-muted-foreground">
+          <p className="mt-3 text-center text-xs text-muted-foreground">
+            Have a promo code? Apply it at checkout.
+          </p>
+          <p className="mt-2 text-center text-[10px] uppercase tracking-widest text-muted-foreground">
             Secure checkout · Stripe
           </p>
         </aside>

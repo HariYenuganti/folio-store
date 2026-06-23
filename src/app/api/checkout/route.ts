@@ -70,6 +70,9 @@ export async function POST(req: Request) {
       payment_method_types: ["card"],
       customer_email: email ?? undefined,
       client_reference_id: userId,
+      // Surfaces Stripe's built-in promotion-code box on the hosted checkout.
+      // Codes are managed in the Stripe dashboard (Products → Coupons).
+      allow_promotion_codes: true,
       line_items: items.map((i) => ({
         quantity: i.quantity,
         price_data: {
