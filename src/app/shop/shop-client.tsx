@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { Loader2, SlidersHorizontal, Check } from "lucide-react";
 import { useProducts } from "@/hooks/use-products";
@@ -19,6 +19,8 @@ import { cn } from "@/lib/utils";
 import type { Product, Size } from "@/types";
 
 const SIZES: Size[] = ["XS", "S", "M", "L", "XL", "XXL"];
+
+const PAGE_SIZE = 12;
 
 type Sort = "featured" | "price-asc" | "price-desc" | "new" | "rating";
 
@@ -55,6 +57,7 @@ export function ShopClient({ products }: { products: Product[] }) {
   const [inStockOnly, setInStockOnly] = useState(false);
   const [brand, setBrand] = useState("all");
   const [filtersOpen, setFiltersOpen] = useState(false);
+  const [visible, setVisible] = useState(PAGE_SIZE);
 
   const activeFilterCount =
     (category !== "all" ? 1 : 0) +
@@ -148,6 +151,9 @@ export function ShopClient({ products }: { products: Product[] }) {
     minRating,
     inStockOnly,
   ]);
+
+  // Reset paging whenever the result set changes.
+  useEffect(() => setVisible(PAGE_SIZE), [filtered]);
 
   const updateUrl = (key: string, value: string) => {
     const u = new URLSearchParams(params.toString());
@@ -433,7 +439,21 @@ export function ShopClient({ products }: { products: Product[] }) {
               </SelectContent>
             </Select>
           </div>
-          <ProductGrid products={filtered} query={query} />
+          <ProductGrid products={filtered.slice(0, visible)} query={query} />
+          {visible < filtered.length && (
+            <div className="mt-12 flex flex-col items-center gap-3">
+              <p className="text-xs uppercase tracking-widest text-muted-foreground">
+                Showing {Math.min(visible, filtered.length)} of{" "}
+                {filtered.length}
+              </p>
+              <Button
+                variant="outline"
+                onClick={() => setVisible((v) => v + PAGE_SIZE)}
+              >
+                Load more
+              </Button>
+            </div>
+          )}
         </div>
       </div>
     </div>
