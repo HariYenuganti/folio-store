@@ -10,8 +10,8 @@ const SECTIONS = [
     id: "shipping",
     title: "Shipping",
     body: [
-      "Complimentary standard shipping on all orders over $200. Below that, a flat $12 rate applies at checkout.",
-      "Orders are dispatched within 2–4 business days. You'll receive tracking by email as soon as your order ships.",
+      "Complimentary standard shipping on all orders over $200. Below that, a flat $15 rate applies at checkout.",
+      "Orders are typically prepared within 2–4 business days. You can review your orders anytime from your account.",
     ],
   },
   {
@@ -19,7 +19,7 @@ const SECTIONS = [
     title: "Returns & exchanges",
     body: [
       "Changed your mind? Return any unworn item with its original tags within 30 days for a full refund. Returns are free.",
-      "To start a return, head to your account or contact us and we'll send a prepaid label.",
+      "To arrange a return, contact us and we'll help you out.",
     ],
   },
   {
