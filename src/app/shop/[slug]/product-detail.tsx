@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { WishlistButton } from "@/components/wishlist-button";
+import { SizeGuideDialog } from "@/components/size-guide-dialog";
 import {
   Accordion,
   AccordionContent,
@@ -207,9 +208,7 @@ export function ProductDetail({ product }: { product: Product }) {
             <p className="text-xs uppercase tracking-widest text-muted-foreground">
               Size
             </p>
-            <button className="text-xs uppercase tracking-widest underline-offset-4 hover:underline">
-              Size guide
-            </button>
+            <SizeGuideDialog />
           </div>
           <div className="mt-3 grid grid-cols-6 gap-2">
             {product.sizes.map((s) => (
